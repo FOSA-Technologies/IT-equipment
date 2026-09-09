@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+/* Jetons de design IT-equipment — identité visuelle de la maquette */
+@theme {
+  --color-encre: #22262e;
+  --color-encre-2: #4b5261;
+  --color-encre-3: #7a8190;
+  --color-fond: #f5f6f8;
+  --color-ligne: #e3e6eb;
+  --color-illu: #eff1f4;
+  --color-sombre: #1e2127;
+  --color-cuivre: #a94e22;
+  --color-cuivre-fonce: #8c3e1b;
+  --color-cuivre-pale: #c98a63;
+  --color-cuivre-clair: #e9cfc0;
+  --color-vert: #3e7c4f;
+  --color-vert-fond: #eaf2ec;
+  --color-ambre: #a97b1e;
+  --color-ambre-fond: #f6f0e0;
+  --color-rouge: #b3402a;
+  --color-rouge-fonce: #962f1e;
+  --color-rouge-fond: #f7e9e5;
+  --font-titre: "Space Grotesk", system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-fond font-sans text-encre;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-cuivre);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background-color: var(--color-cuivre-clair);
+  }
+}

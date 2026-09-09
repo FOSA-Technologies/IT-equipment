@@ -1,0 +1,3869 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IT-equipment — maquette</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============ Jetons ============ */
+      :root {
+        --encre: #22262e;
+        --encre-2: #4b5261;
+        --encre-3: #7a8190;
+        --fond: #f5f6f8;
+        --surface: #ffffff;
+        --ligne: #e3e6eb;
+        --illu-fond: #eff1f4;
+        --cuivre: #a94e22;
+        --cuivre-fonce: #8c3e1b;
+        --cuivre-clair: #e9cfc0;
+        --vert: #3e7c4f;
+        --vert-fond: #eaf2ec;
+        --ambre: #a97b1e;
+        --ambre-fond: #f6f0e0;
+        --rouge: #b3402a;
+        --rouge-fond: #f7e9e5;
+        --sombre: #1e2127;
+        --font-titre: "Space Grotesk", system-ui, sans-serif;
+        --font-texte: "IBM Plex Sans", system-ui, sans-serif;
+        --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        font-family: var(--font-texte);
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--encre);
+        background: var(--fond);
+      }
+      [hidden] {
+        display: none !important;
+      }
+      body[data-mode="admin"] .entete,
+      body[data-mode="admin"] .pied,
+      body[data-mode="connexion"] .entete,
+      body[data-mode="connexion"] .pied {
+        display: none;
+      }
+      img,
+      svg {
+        display: block;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: var(--font-titre);
+        line-height: 1.15;
+        margin: 0;
+      }
+      p {
+        margin: 0;
+      }
+      input,
+      select,
+      textarea {
+        font: inherit;
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--cuivre);
+        outline-offset: 2px;
+      }
+      ::selection {
+        background: var(--cuivre-clair);
+      }
+
+      .conteneur {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .mono {
+        font-family: var(--font-mono);
+      }
+      .mono-muet {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--encre-3);
+      }
+      .icone {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* ============ Boutons ============ */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 20px;
+        border-radius: 8px;
+        border: 1.5px solid var(--ligne);
+        background: var(--surface);
+        font-weight: 600;
+        font-size: 15px;
+        transition:
+          border-color 0.15s,
+          background-color 0.15s;
+      }
+      .btn:hover {
+        border-color: var(--encre);
+      }
+      .btn-cuivre {
+        background: var(--cuivre);
+        border-color: var(--cuivre);
+        color: #fff;
+      }
+      .btn-cuivre:hover {
+        background: var(--cuivre-fonce);
+        border-color: var(--cuivre-fonce);
+      }
+      .btn-fantome {
+        border-color: transparent;
+        color: var(--encre-2);
+        background: transparent;
+      }
+      .btn-fantome:hover {
+        border-color: var(--ligne);
+        color: var(--encre);
+      }
+      .btn-rouge {
+        background: var(--rouge);
+        border-color: var(--rouge);
+        color: #fff;
+      }
+      .btn-rouge:hover {
+        background: #962f1e;
+        border-color: #962f1e;
+      }
+      .btn-bloc {
+        width: 100%;
+        justify-content: center;
+      }
+      .btn-ico {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border: 1.5px solid var(--ligne);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--encre-2);
+        transition:
+          border-color 0.15s,
+          color 0.15s,
+          background-color 0.15s;
+      }
+      .btn-ico:hover {
+        border-color: var(--cuivre);
+        color: var(--cuivre);
+      }
+      .lien-muet {
+        color: var(--encre-3);
+        font-size: 14px;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .lien-muet:hover {
+        color: var(--cuivre);
+      }
+
+      /* ============ Motif trace de cuivre ============ */
+      .trace {
+        width: 56px;
+        height: 2px;
+        background: var(--cuivre);
+        position: relative;
+        margin-bottom: 14px;
+      }
+      .trace::before,
+      .trace::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--cuivre);
+        transform: translateY(-50%);
+      }
+      .trace::before {
+        left: -2px;
+      }
+      .trace::after {
+        right: -2px;
+      }
+
+      /* ============ Entête client ============ */
+      .entete {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: var(--surface);
+        border-bottom: 1px solid var(--ligne);
+      }
+      .entete-grille {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        height: 64px;
+      }
+      .logo {
+        font-family: var(--font-titre);
+        font-weight: 700;
+        font-size: 19px;
+        letter-spacing: -0.01em;
+      }
+      .tire {
+        color: var(--cuivre);
+      }
+      .nav-principale {
+        display: flex;
+        gap: 20px;
+      }
+      .nav-lien {
+        font-size: 14.5px;
+        font-weight: 500;
+        color: var(--encre-2);
+        transition: color 0.15s;
+      }
+      .nav-lien:hover {
+        color: var(--cuivre);
+      }
+      .entete-actions {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn-panier {
+        position: relative;
+      }
+      .badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        border-radius: 999px;
+        background: var(--cuivre);
+        color: #fff;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* ============ Écrans ============ */
+      .ecran {
+        display: none;
+      }
+      .ecran.active {
+        display: block;
+      }
+      .section {
+        padding: 52px 0;
+      }
+      .titre-section {
+        font-size: 24px;
+        margin-bottom: 22px;
+      }
+
+      /* ============ Accueil ============ */
+      .hero {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 48px;
+        align-items: center;
+        padding: 64px 0 48px;
+      }
+      .hero h1 {
+        font-size: clamp(30px, 4.2vw, 46px);
+        letter-spacing: -0.02em;
+        max-width: 15ch;
+      }
+      .hero-sous {
+        color: var(--encre-2);
+        font-size: 17px;
+        margin-top: 16px;
+        max-width: 46ch;
+      }
+      .form-recherche {
+        display: flex;
+        gap: 0;
+        margin-top: 28px;
+        max-width: 520px;
+      }
+      .form-recherche input {
+        flex: 1;
+        height: 54px;
+        padding: 0 18px;
+        border: 1.5px solid var(--ligne);
+        border-right: none;
+        border-radius: 10px 0 0 10px;
+        background: var(--surface);
+        font-size: 16px;
+      }
+      .form-recherche input:focus {
+        outline: none;
+        border-color: var(--cuivre);
+      }
+      .form-recherche input::placeholder {
+        color: var(--encre-3);
+      }
+      .form-recherche button {
+        height: 54px;
+        padding: 0 22px;
+        border-radius: 0 10px 10px 0;
+        background: var(--cuivre);
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .form-recherche button:hover {
+        background: var(--cuivre-fonce);
+      }
+      .puces {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .puce {
+        padding: 7px 14px;
+        border: 1.5px solid var(--ligne);
+        border-radius: 999px;
+        background: var(--surface);
+        font-size: 14px;
+        color: var(--encre-2);
+        transition:
+          border-color 0.15s,
+          color 0.15s;
+      }
+      .puce:hover {
+        border-color: var(--cuivre);
+        color: var(--cuivre);
+      }
+
+      .carte {
+        border: 1px solid var(--ligne);
+        border-radius: 10px;
+        background: var(--surface);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: border-color 0.15s;
+      }
+      .carte:hover {
+        border-color: var(--cuivre);
+      }
+      .carte-illu {
+        position: relative;
+        display: block;
+        background: var(--illu-fond);
+        padding: 20px;
+      }
+      .illu-svg {
+        width: 100%;
+        height: auto;
+      }
+      .tag {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        padding: 4px 11px;
+        border-radius: 999px;
+        background: var(--cuivre);
+        color: #fff;
+        font-size: 12.5px;
+        font-weight: 600;
+      }
+      .carte-corps {
+        padding: 14px 16px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+      }
+      .carte-ref {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--encre-3);
+        letter-spacing: 0.02em;
+      }
+      .carte-nom {
+        font-family: var(--font-texte);
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.35;
+      }
+      .carte-nom a:hover {
+        color: var(--cuivre);
+      }
+      .carte-spec {
+        font-size: 13px;
+        color: var(--encre-2);
+      }
+      .carte-bas {
+        margin-top: auto;
+        padding-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .prix {
+        font-family: var(--font-mono);
+        font-weight: 600;
+        font-size: 15px;
+      }
+      .prix-barre {
+        color: var(--encre-3);
+        font-weight: 400;
+        margin-right: 6px;
+      }
+
+      .a-la-une .carte-corps {
+        padding: 18px 20px 20px;
+        gap: 6px;
+      }
+      .a-la-une .carte-nom {
+        font-size: 17px;
+      }
+      .a-la-une .prix {
+        font-size: 17px;
+      }
+
+      .tuiles-cats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+        gap: 14px;
+      }
+      .tuile {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 18px;
+        border: 1px solid var(--ligne);
+        border-radius: 10px;
+        background: var(--surface);
+        transition: border-color 0.15s;
+      }
+      .tuile:hover {
+        border-color: var(--cuivre);
+      }
+      .tuile svg {
+        width: 26px;
+        height: 26px;
+        color: var(--encre);
+      }
+      .tuile-nom {
+        font-weight: 600;
+        font-size: 14.5px;
+      }
+      .tuile-nb {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--encre-3);
+      }
+
+      .grille-cartes {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .bandeau {
+        border-top: 1px solid var(--ligne);
+        border-bottom: 1px solid var(--ligne);
+        background: var(--surface);
+        padding: 30px 0;
+      }
+      .bandeau-grille {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+      }
+      .bandeau-item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+      }
+      .bandeau-item svg {
+        width: 24px;
+        height: 24px;
+        color: var(--cuivre);
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .bandeau-item h3 {
+        font-size: 15px;
+        font-weight: 600;
+        font-family: var(--font-texte);
+      }
+      .bandeau-item p {
+        font-size: 13.5px;
+        color: var(--encre-2);
+        margin-top: 2px;
+      }
+
+      /* ============ Boutique ============ */
+      .boutique-entete {
+        padding: 36px 0 24px;
+      }
+      .boutique-grille {
+        display: grid;
+        grid-template-columns: 230px 1fr;
+        gap: 32px;
+        padding-bottom: 60px;
+      }
+      .filtres {
+        display: grid;
+        gap: 26px;
+        align-content: start;
+        position: sticky;
+        top: 88px;
+      }
+      .groupe-filtre h4 {
+        font-size: 13.5px;
+        font-weight: 600;
+        margin: 0 0 10px;
+      }
+      .option {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 14px;
+        color: var(--encre-2);
+        padding: 3px 0;
+      }
+      .option input {
+        accent-color: var(--cuivre);
+        width: 16px;
+        height: 16px;
+      }
+      .option .nb {
+        font-family: var(--font-mono);
+        font-size: 11.5px;
+        color: var(--encre-3);
+        margin-left: auto;
+      }
+      .ligne-sep {
+        border-top: 1px solid var(--ligne);
+        padding-top: 22px;
+      }
+      .ligne-boutique {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      .ligne-boutique h1 {
+        font-size: 22px;
+      }
+      .nb-resultats {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: var(--encre-3);
+      }
+      .tri {
+        margin-left: auto;
+        padding: 9px 12px;
+        border: 1.5px solid var(--ligne);
+        border-radius: 8px;
+        background: var(--surface);
+        font-size: 14px;
+        color: var(--encre-2);
+      }
+      .tri:focus {
+        outline: none;
+        border-color: var(--cuivre);
+      }
+      .etat-vide {
+        grid-column: 1/-1;
+        text-align: center;
+        padding: 64px 24px;
+        border: 1px dashed var(--ligne);
+        border-radius: 10px;
+        background: var(--surface);
+      }
+      .etat-vide h3 {
+        font-size: 18px;
+        margin-bottom: 6px;
+      }
+      .etat-vide p {
+        color: var(--encre-2);
+        font-size: 14.5px;
+        margin-bottom: 18px;
+      }
+
+      /* ============ Fiche produit ============ */
+      .fiche-haut {
+        padding: 36px 0 0;
+      }
+      .fil-ariane {
+        font-family: var(--font-mono);
+        font-size: 12.5px;
+        color: var(--encre-3);
+        margin-bottom: 22px;
+      }
+      .fil-ariane a:hover {
+        color: var(--cuivre);
+      }
+      .fil-ariane .ici {
+        color: var(--encre-2);
+      }
+      .fiche-grille {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        align-items: start;
+      }
+      .fiche-visuel {
+        border: 1px solid var(--ligne);
+        border-radius: 10px;
+        background: var(--illu-fond);
+        padding: 36px;
+      }
+      .fiche-ref {
+        font-family: var(--font-mono);
+        font-size: 12.5px;
+        color: var(--encre-3);
+        letter-spacing: 0.02em;
+      }
+      .fiche-titre {
+        font-size: clamp(24px, 3vw, 32px);
+        letter-spacing: -0.01em;
+        margin: 8px 0 10px;
+      }
+      .fiche-desc {
+        color: var(--encre-2);
+        max-width: 52ch;
+        margin-bottom: 18px;
+      }
+      .fiche-prix {
+        font-family: var(--font-mono);
+        font-size: 27px;
+        font-weight: 600;
+        margin-bottom: 14px;
+      }
+      .fiche-prix .prix-barre {
+        font-size: 17px;
+      }
+      .statut {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .dot-vert {
+        background: var(--vert);
+      }
+      .dot-ambre {
+        background: var(--ambre);
+      }
+      .dot-rouge {
+        background: var(--rouge);
+      }
+      .fiche-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 20px 0 22px;
+      }
+      .qte-fiche {
+        padding: 10px 12px;
+        border: 1.5px solid var(--ligne);
+        border-radius: 8px;
+        background: var(--surface);
+        font-size: 15px;
+      }
+      .garanties {
+        display: grid;
+        gap: 8px;
+        border-top: 1px solid var(--ligne);
+        padding-top: 18px;
+      }
+      .garanties li {
+        display: flex;
+        gap: 9px;
+        align-items: center;
+        list-style: none;
+        font-size: 14px;
+        color: var(--encre-2);
+      }
+      .garanties svg {
+        width: 16px;
+        height: 16px;
+        color: var(--vert);
+        flex-shrink: 0;
+      }
+      .fiche-table {
+        max-width: 620px;
+        margin-top: 36px;
+      }
+      .table-fiche {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid var(--ligne);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .table-fiche tr + tr {
+        border-top: 1px solid var(--ligne);
+      }
+      .table-fiche th,
+      .table-fiche td {
+        text-align: left;
+        padding: 12px 18px;
+        font-size: 14px;
+      }
+      .table-fiche th {
+        background: var(--illu-fond);
+        color: var(--encre-2);
+        font-weight: 500;
+        width: 40%;
+      }
+      .table-fiche td {
+        font-weight: 600;
+      }
+
+      /* ============ Panier ============ */
+      .titre-page {
+        padding: 36px 0 22px;
+      }
+      .tableau {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .tableau th {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--encre-3);
+        text-align: left;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--ligne);
+      }
+      .tableau td {
+        padding: 16px 14px;
+        border-bottom: 1px solid var(--ligne);
+        font-size: 14.5px;
+        vertical-align: middle;
+      }
+      .tableau tr:last-child td {
+        border-bottom: none;
+      }
+      .cellule-produit {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .vignette {
+        width: 64px;
+        height: 48px;
+        border: 1px solid var(--ligne);
+        border-radius: 8px;
+        background: var(--illu-fond);
+        padding: 6px;
+        flex-shrink: 0;
+      }
+      .vignette svg {
+        width: 100%;
+        height: 100%;
+      }
+      .nom-cellule {
+        font-weight: 600;
+        font-size: 14.5px;
+      }
+      .qt {
+        display: inline-flex;
+        align-items: center;
+        border: 1.5px solid var(--ligne);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .qt button {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--encre-2);
+      }
+      .qt button:hover {
+        color: var(--cuivre);
+      }
+      .qt .qte-valeur {
+        font-family: var(--font-mono);
+        font-size: 14px;
+        min-width: 26px;
+        text-align: center;
+      }
+      .prix-ligne {
+        font-family: var(--font-mono);
+        font-weight: 600;
+      }
+      .panier-grille {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 28px;
+        align-items: start;
+        padding-bottom: 60px;
+      }
+      .carte-resume {
+        border: 1px solid var(--ligne);
+        border-radius: 10px;
+        background: var(--surface);
+        padding: 22px;
+      }
+      .carte-resume h3 {
+        font-size: 16px;
+        margin-bottom: 14px;
+      }
+      .resume-lignes {
+        display: grid;
+        gap: 8px;
+        font-size: 14.5px;
+      }
+      .resume-lignes div {
+        display: flex;
+        justify-content: space-between;
+        color: var(--encre-2);
+      }
+      .resume-total {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid var(--ligne);
+        margin-top: 14px;
+        padding-top: 14px;
+        font-weight: 600;
+      }
+      .resume-total .prix {
+        font-size: 19px;
+      }
+      .carte-resume .btn {
+        margin-top: 18px;
+      }
+      .note-securite {
+        font-family: var(--font-mono);
+        font-size: 11.5px;
+        color: var(--encre-3);
+        margin-top: 12px;
+      }
+      .panier-vide {
+        text-align: center;
+        padding: 80px 24px;
+        border: 1px dashed var(--ligne);
+        border-radius: 10px;
+        background: var(--surface);
+      }
+      .panier-vide h2 {
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+      .panier-vide p {
+        color: var(--encre-2);
+        margin-bottom: 22px;
+      }
+
+      /* ============ Commande ============ */
+      .etapes {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        padding: 30px 0 22px;
+      }
+      .etape {
+        color: var(--encre-3);
+      }
+      .etape.actuel {
+        color: var(--cuivre);
+        font-weight: 600;
+      }
+      .commande-grille {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 32px;
+        align-items: start;
+        padding-bottom: 60px;
+      }
+      .bloc-form {
+        border: 1px solid var(--ligne);
+        border-radius: 10px;
+        background: var(--surface);
+        padding: 24px;
+      }
+      .bloc-form + .bloc-form {
+        margin-top: 20px;
+      }
+      .bloc-form h2 {
+        font-size: 17px;
+        margin-bottom: 16px;
+      }
+      .champs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .champ {
+        display: grid;
+        gap: 6px;
+      }
+      .champ.pleine {
+        grid-column: 1/-1;
+      }
+      .champ label {
+        font-size: 13.5px;
+        font-weight: 600;
+      }
+      .champ input,
+      .champ select,
+      .champ textarea {
+        border: 1.5px solid var(--ligne);
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 15px;
+        background: var(--surface);
+        width: 100%;
+      }
+      .champ input:focus,
+      .champ select:focus,
+      .champ textarea:focus {
+        outline: none;
+        border-color: var(--cuivre);
+      }
+      .champ textarea {
+        resize: vertical;
+      }
+      .radios-paiement {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .radio-carte {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+        border: 1.5px solid var(--ligne);
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 13.5px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .radio-carte input {
+        accent-color: var(--cuivre);
+        width: 15px;
+        height: 15px;
+      }
+      .radio-carte svg {
+        width: 20px;
+        height: 20px;
+        color: var(--encre-2);
+      }
+      .radio-carte:has(input:checked) {
+        border-color: var(--cuivre);
+        background: var(--cuivre-clair);
+        background: rgba(169, 78, 34, 0.06);
+      }
+      .recap-lignes {
+        display: grid;
+        gap: 10px;
+        font-size: 14px;
+      }
+      .recap-lignes .ligne-recap {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--encre-2);
+      }
+      .recap-lignes .ligne-recap .prix {
+        margin-left: auto;
+        color: var(--encre);
+      }
+      .confirmation {
+        text-align: center;
+        padding: 56px 24px 80px;
+      }
+      .conf-icone {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: var(--vert);
+        color: #fff;
+        margin-bottom: 20px;
+      }
+      .conf-icone svg {
+        width: 30px;
+        height: 30px;
+      }
+      .confirmation h1 {
+        font-size: 30px;
+        margin-bottom: 8px;
+      }
+      .conf-ref {
+        font-family: var(--font-mono);
+        font-size: 15px;
+        color: var(--encre-2);
+        margin-bottom: 16px;
+      }
+      .confirmation .conf-texte {
+        color: var(--encre-2);
+        max-width: 52ch;
+        margin: 0 auto 24px;
+      }
+      .conf-lignes {
+        border: 1px solid var(--ligne);
+        border-radius: 10px;
+        background: var(--surface);
+        max-width: 460px;
+        margin: 0 auto 24px;
+        padding: 18px 22px;
+        display: grid;
+        gap: 8px;
+        font-size: 14.5px;
+        text-align: left;
+      }
+      .conf-lignes div {
+        display: flex;
+        justify-content: space-between;
+        color: var(--encre-2);
+      }
+      .conf-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* ============ Connexion ============ */
+      .connexion-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+      }
+      .carte-connexion {
+        width: 400px;
+        max-width: 100%;
+        border: 1px solid var(--ligne);
+        border-radius: 12px;
+        background: var(--surface);
+        padding: 36px;
+      }
+      .logo-centre {
+        display: block;
+        text-align: center;
+        font-size: 21px;
+        margin-bottom: 14px;
+      }
+      .trace-centre {
+        margin-left: auto;
+        margin-right: auto;
+        width: 40px;
+      }
+      .carte-connexion h1 {
+        font-size: 23px;
+        text-align: center;
+      }
+      .sous {
+        text-align: center;
+        color: var(--encre-2);
+        font-size: 14.5px;
+        margin: 10px 0 26px;
+      }
+      .carte-connexion .champ {
+        margin-bottom: 16px;
+      }
+      .mdp-ligne {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -10px;
+        margin-bottom: 16px;
+        font-size: 13px;
+      }
+      .case {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 14px;
+        color: var(--encre-2);
+        margin-bottom: 20px;
+        cursor: pointer;
+      }
+      .case input {
+        accent-color: var(--cuivre);
+        width: 16px;
+        height: 16px;
+      }
+      .note {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--encre-3);
+        text-align: center;
+        margin-top: 18px;
+      }
+
+      /* ============ Admin ============ */
+      .admin-grille {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        min-height: 100vh;
+      }
+      .side-admin {
+        background: var(--sombre);
+        color: #a6adbb;
+        display: flex;
+        flex-direction: column;
+        padding: 22px 16px;
+        gap: 26px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+      .logo-sombre {
+        color: #fff;
+        font-size: 18px;
+        padding: 0 10px;
+      }
+      .side-nav {
+        display: grid;
+        gap: 2px;
+      }
+      .side-lien {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 14.5px;
+        text-align: left;
+        color: #a6adbb;
+        border-left: 3px solid transparent;
+      }
+      .side-lien:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .side-lien.actif {
+        color: #fff;
+        background: rgba(169, 78, 34, 0.22);
+        border-left-color: var(--cuivre);
+      }
+      .side-lien.inactif {
+        opacity: 0.45;
+        cursor: default;
+      }
+      .side-bas {
+        margin-top: auto;
+        display: grid;
+        gap: 2px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        padding-top: 14px;
+      }
+      .admin-main {
+        padding: 32px 36px 60px;
+        max-width: 1080px;
+      }
+      .admin-titre {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+        margin-bottom: 26px;
+      }
+      .admin-titre h1 {
+        font-size: 26px;
+      }
+      .date-admin {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: var(--encre-3);
+        margin-left: auto;
+      }
+      .tuiles-stat {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .tuile-stat {
+        border: 1px solid var(--ligne);
+        border-radius: 10px;
+        background: var(--surface);
+        padding: 18px;
+      }
+      .tuile-stat .etiquette {
+        font-size: 13px;
+        color: var(--encre-2);
+      }
+      .tuile-stat .valeur {
+        font-family: var(--font-mono);
+        font-size: 24px;
+        font-weight: 600;
+        margin: 6px 0 2px;
+      }
+      .delta {
+        font-family: var(--font-mono);
+        font-size: 12px;
+      }
+      .delta.hausse {
+        color: var(--vert);
+      }
+      .delta.baisse {
+        color: var(--rouge);
+      }
+      .delta.neutre {
+        color: var(--ambre);
+      }
+      .cartes-admin {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .carte-admin {
+        border: 1px solid var(--ligne);
+        border-radius: 10px;
+        background: var(--surface);
+        padding: 22px;
+      }
+      .carte-admin h3 {
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+      .caption {
+        font-family: var(--font-mono);
+        font-size: 11.5px;
+        color: var(--encre-3);
+        margin-bottom: 16px;
+      }
+      .graph-wrap {
+        position: relative;
+      }
+      .graph-svg {
+        width: 100%;
+        height: auto;
+      }
+      .barre {
+        fill: var(--cuivre);
+        transition: fill 0.15s;
+      }
+      .barre:hover {
+        fill: var(--cuivre-fonce);
+      }
+      .barre-auj {
+        fill: #c98a63;
+      }
+      .grille {
+        stroke: var(--ligne);
+        stroke-width: 1;
+      }
+      .axe-txt {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        fill: var(--encre-3);
+      }
+      .axe-txt.fort {
+        font-weight: 600;
+        fill: var(--encre);
+      }
+      .info-vente {
+        position: absolute;
+        pointer-events: none;
+        background: var(--sombre);
+        color: #fff;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        transform: translate(-50%, -115%);
+        white-space: nowrap;
+      }
+      .liste-alertes {
+        display: grid;
+        gap: 14px;
+      }
+      .alerte {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 10px;
+        align-items: center;
+      }
+      .alerte .nom-a {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .alerte .qte-a {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--encre-3);
+      }
+      .alerte .lien-muet {
+        font-size: 12.5px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 11px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        font-weight: 500;
+      }
+      .pill-verte {
+        background: var(--vert-fond);
+        color: var(--vert);
+      }
+      .pill-ambre {
+        background: var(--ambre-fond);
+        color: var(--ambre);
+      }
+      .pill-grise {
+        background: var(--illu-fond);
+        color: var(--encre-2);
+      }
+      .table-wrap {
+        overflow-x: auto;
+      }
+      .actions-cell {
+        display: flex;
+        gap: 4px;
+      }
+      .actions-cell .btn-ico {
+        width: 32px;
+        height: 32px;
+      }
+      .actions-cell .suppr:hover {
+        color: var(--rouge);
+        border-color: var(--rouge);
+      }
+      .recherche-admin {
+        width: 260px;
+        max-width: 100%;
+        height: 42px;
+        padding: 0 14px;
+        border: 1.5px solid var(--ligne);
+        border-radius: 8px;
+        background: var(--surface);
+        font-size: 14.5px;
+      }
+      .recherche-admin:focus {
+        outline: none;
+        border-color: var(--cuivre);
+      }
+
+      /* ============ Modales ============ */
+      .voile {
+        position: fixed;
+        inset: 0;
+        background: rgba(30, 33, 39, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        z-index: 80;
+      }
+      .modale {
+        background: var(--surface);
+        border-radius: 12px;
+        padding: 26px;
+        width: 520px;
+        max-width: 100%;
+        max-height: 90vh;
+        overflow: auto;
+      }
+      .modale.petite {
+        width: 420px;
+      }
+      .modale-entete {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .modale-entete h2 {
+        font-size: 19px;
+      }
+      .modale form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .modale-pied {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 22px;
+      }
+      .modale.petite p {
+        color: var(--encre-2);
+        margin-bottom: 22px;
+      }
+
+      /* ============ Toast ============ */
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 74px;
+        transform: translateX(-50%) translateY(8px);
+        background: var(--sombre);
+        color: #fff;
+        font-size: 14px;
+        padding: 10px 18px;
+        border-radius: 8px;
+        z-index: 70;
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          opacity 0.2s,
+          transform 0.2s;
+        box-shadow: 0 8px 24px rgba(30, 33, 39, 0.25);
+      }
+      .toast.visible {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* ============ Barre de navigation du prototype ============ */
+      .proto {
+        position: fixed;
+        bottom: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 60;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--sombre);
+        color: #d7dbe3;
+        border-radius: 12px;
+        padding: 6px 8px;
+        box-shadow: 0 8px 24px rgba(30, 33, 39, 0.35);
+        font-size: 13px;
+      }
+      .proto-puce {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #9ba1ac;
+        font-family: var(--font-mono);
+        font-size: 11.5px;
+        letter-spacing: 0.03em;
+        padding: 5px 8px;
+        border-radius: 7px;
+      }
+      .proto-puce:hover {
+        color: #fff;
+      }
+      .proto-puce svg {
+        width: 13px;
+        height: 13px;
+        transition: transform 0.15s;
+      }
+      .proto.replie .proto-puce svg {
+        transform: rotate(-90deg);
+      }
+      .proto-groupe {
+        position: relative;
+      }
+      .proto-groupe summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 7px;
+        font-weight: 500;
+      }
+      .proto-groupe summary::-webkit-details-marker {
+        display: none;
+      }
+      .proto-groupe summary:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .proto-groupe[open] summary {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+      .proto-liens {
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 0;
+        background: var(--sombre);
+        border-radius: 10px;
+        padding: 6px;
+        display: grid;
+        min-width: 170px;
+        box-shadow: 0 8px 24px rgba(30, 33, 39, 0.35);
+      }
+      .proto-liens button {
+        display: block;
+        text-align: left;
+        padding: 7px 12px;
+        border-radius: 7px;
+        color: #c4c9d2;
+        font-size: 13px;
+      }
+      .proto-liens button:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+      .proto-liens button.actif {
+        color: var(--cuivre-clair);
+        background: rgba(169, 78, 34, 0.25);
+      }
+      .proto-sep {
+        width: 1px;
+        height: 22px;
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      /* ============ Pied de page ============ */
+      .pied {
+        border-top: 1px solid var(--ligne);
+        background: var(--surface);
+        margin-top: 30px;
+      }
+      .pied-grille {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 32px;
+        padding: 44px 24px 36px;
+      }
+      .pied-texte {
+        font-size: 14px;
+        color: var(--encre-2);
+        margin-top: 10px;
+        max-width: 34ch;
+      }
+      .pied-col h4 {
+        font-size: 13.5px;
+        font-weight: 600;
+        margin: 0 0 12px;
+      }
+      .pied-col a {
+        display: block;
+        font-size: 14px;
+        color: var(--encre-2);
+        padding: 4px 0;
+      }
+      .pied-col a:hover {
+        color: var(--cuivre);
+      }
+      .pied-bas {
+        border-top: 1px solid var(--ligne);
+        padding: 16px 24px;
+        text-align: center;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--encre-3);
+      }
+
+      /* ============ Responsive ============ */
+      @media (max-width: 1020px) {
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+        .a-la-une {
+          max-width: 440px;
+        }
+        .boutique-grille {
+          grid-template-columns: 1fr;
+        }
+        .filtres {
+          position: static;
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .fiche-grille {
+          grid-template-columns: 1fr;
+          gap: 28px;
+        }
+        .panier-grille {
+          grid-template-columns: 1fr;
+        }
+        .commande-grille {
+          grid-template-columns: 1fr;
+        }
+        .admin-grille {
+          grid-template-columns: 1fr;
+        }
+        .side-admin {
+          position: static;
+          height: auto;
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 16px;
+        }
+        .side-nav {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .side-bas {
+          margin-top: 0;
+          margin-left: auto;
+          border-top: none;
+          padding-top: 0;
+          display: flex;
+        }
+        .admin-main {
+          padding: 24px 20px 80px;
+        }
+        .tuiles-stat {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .cartes-admin {
+          grid-template-columns: 1fr;
+        }
+        .bandeau-grille {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 640px) {
+        .nav-principale {
+          display: none;
+        }
+        .conteneur {
+          padding: 0 16px;
+        }
+        .entete-grille {
+          gap: 14px;
+        }
+        .hero {
+          padding: 44px 0 36px;
+        }
+        .filtres {
+          grid-template-columns: 1fr;
+        }
+        .champs {
+          grid-template-columns: 1fr;
+        }
+        .radios-paiement {
+          grid-template-columns: 1fr;
+        }
+        .pied-grille {
+          grid-template-columns: 1fr;
+          gap: 22px;
+        }
+        .admin-titre {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+        .date-admin {
+          margin-left: 0;
+        }
+        .recherche-admin {
+          width: 100%;
+        }
+        .proto {
+          left: 8px;
+          right: 8px;
+          transform: none;
+          justify-content: center;
+          bottom: 8px;
+        }
+        .toast {
+          bottom: 70px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ================= Symboles SVG (illustrations techniques) ================= -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <pattern
+          id="p-clav"
+          width="14"
+          height="14"
+          patternUnits="userSpaceOnUse"
+        >
+          <rect
+            x="1"
+            y="1"
+            width="11"
+            height="11"
+            rx="2"
+            fill="#F0F2F5"
+            stroke="#22262E"
+            stroke-width="1"
+          />
+        </pattern>
+      </defs>
+      <symbol id="i-ram" viewBox="0 0 220 150">
+        <rect
+          x="30"
+          y="52"
+          width="160"
+          height="46"
+          rx="5"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2.5"
+        />
+        <g fill="#F0F2F5" stroke="#22262E" stroke-width="1.5">
+          <rect x="44" y="64" width="13" height="24" rx="2" />
+          <rect x="62" y="64" width="13" height="24" rx="2" />
+          <rect x="80" y="64" width="13" height="24" rx="2" />
+          <rect x="98" y="64" width="13" height="24" rx="2" />
+          <rect x="116" y="64" width="13" height="24" rx="2" />
+          <rect x="134" y="64" width="13" height="24" rx="2" />
+          <rect x="152" y="64" width="13" height="24" rx="2" />
+          <rect x="170" y="64" width="13" height="24" rx="2" />
+        </g>
+        <path d="M30 74 H42" stroke="#A94E22" stroke-width="2.5" />
+        <circle cx="32" cy="74" r="3" fill="#A94E22" />
+        <rect x="181" y="66" width="6" height="18" rx="2" fill="#A94E22" />
+      </symbol>
+      <symbol id="i-ssd" viewBox="0 0 220 150">
+        <rect
+          x="92"
+          y="14"
+          width="42"
+          height="104"
+          rx="4"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2.5"
+        />
+        <rect
+          x="92"
+          y="118"
+          width="42"
+          height="16"
+          rx="2"
+          fill="#E9CFC0"
+          stroke="#22262E"
+          stroke-width="2"
+        />
+        <g fill="#F0F2F5" stroke="#22262E" stroke-width="1.5">
+          <rect x="97" y="22" width="32" height="26" rx="3" />
+          <rect x="97" y="56" width="32" height="26" rx="3" />
+          <rect x="97" y="90" width="32" height="20" rx="3" />
+        </g>
+        <circle cx="113" cy="51" r="2.5" fill="#A94E22" />
+        <path d="M113 48 V46" stroke="#A94E22" stroke-width="2" />
+        <rect x="99" y="97" width="28" height="3" fill="#7A8190" />
+        <rect x="99" y="103" width="18" height="3" fill="#7A8190" />
+      </symbol>
+      <symbol id="i-ssd-sata" viewBox="0 0 220 150">
+        <rect
+          x="60"
+          y="38"
+          width="100"
+          height="70"
+          rx="8"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2.5"
+        />
+        <rect
+          x="72"
+          y="48"
+          width="76"
+          height="26"
+          rx="3"
+          fill="#F0F2F5"
+          stroke="#22262E"
+          stroke-width="1.5"
+        />
+        <rect
+          x="72"
+          y="84"
+          width="76"
+          height="14"
+          rx="2"
+          fill="#F0F2F5"
+          stroke="#22262E"
+          stroke-width="1.5"
+        />
+        <rect x="78" y="89" width="48" height="3" fill="#7A8190" />
+        <g fill="none" stroke="#22262E" stroke-width="1.5">
+          <circle cx="66" cy="44" r="2" />
+          <circle cx="154" cy="44" r="2" />
+          <circle cx="66" cy="102" r="2" />
+        </g>
+        <circle cx="150" cy="98" r="3" fill="#A94E22" />
+      </symbol>
+      <symbol id="i-hdd" viewBox="0 0 220 150">
+        <rect
+          x="40"
+          y="18"
+          width="140"
+          height="104"
+          rx="10"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2.5"
+        />
+        <circle
+          cx="72"
+          cy="52"
+          r="20"
+          fill="none"
+          stroke="#22262E"
+          stroke-width="1.5"
+        />
+        <circle
+          cx="72"
+          cy="52"
+          r="6"
+          fill="#F0F2F5"
+          stroke="#22262E"
+          stroke-width="1.5"
+        />
+        <rect
+          x="60"
+          y="88"
+          width="100"
+          height="22"
+          rx="3"
+          fill="#F0F2F5"
+          stroke="#22262E"
+          stroke-width="1.5"
+        />
+        <rect x="66" y="94" width="64" height="3" fill="#7A8190" />
+        <rect x="66" y="101" width="42" height="3" fill="#7A8190" />
+        <g fill="none" stroke="#22262E" stroke-width="1.5">
+          <circle cx="48" cy="26" r="2.5" />
+          <circle cx="172" cy="26" r="2.5" />
+          <circle cx="48" cy="114" r="2.5" />
+          <circle cx="172" cy="114" r="2.5" />
+        </g>
+        <rect x="132" y="58" width="6" height="6" fill="#A94E22" />
+        <path d="M138 61 H172" stroke="#A94E22" stroke-width="2" />
+      </symbol>
+      <symbol id="i-clavier" viewBox="0 0 220 150">
+        <rect
+          x="25"
+          y="34"
+          width="170"
+          height="82"
+          rx="8"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2.5"
+        />
+        <rect
+          x="33"
+          y="42"
+          width="154"
+          height="66"
+          rx="3"
+          fill="url(#p-clav)"
+        />
+        <rect
+          x="62"
+          y="98"
+          width="96"
+          height="8"
+          rx="2"
+          fill="#F0F2F5"
+          stroke="#22262E"
+          stroke-width="1"
+        />
+        <rect
+          x="33"
+          y="42"
+          width="11"
+          height="11"
+          rx="2"
+          fill="#A94E22"
+          stroke="#22262E"
+          stroke-width="1"
+        />
+        <path
+          d="M195 92 C206 92 206 112 197 114"
+          fill="none"
+          stroke="#22262E"
+          stroke-width="2"
+        />
+      </symbol>
+      <symbol id="i-souris" viewBox="0 0 220 150">
+        <path
+          d="M110 30 C88 30 78 46 78 78 C78 112 92 126 110 126 C128 126 142 112 142 78 C142 46 132 30 110 30 Z"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2.5"
+        />
+        <path d="M110 30 V62" fill="none" stroke="#22262E" stroke-width="2" />
+        <rect
+          x="103"
+          y="58"
+          width="14"
+          height="20"
+          rx="4"
+          fill="#F0F2F5"
+          stroke="#22262E"
+          stroke-width="1.5"
+        />
+        <path d="M110 126 V146" fill="none" stroke="#22262E" stroke-width="2" />
+        <circle cx="110" cy="90" r="3" fill="#A94E22" />
+      </symbol>
+      <symbol id="i-ecran" viewBox="0 0 220 150">
+        <rect
+          x="35"
+          y="16"
+          width="150"
+          height="92"
+          rx="6"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2.5"
+        />
+        <rect
+          x="43"
+          y="24"
+          width="134"
+          height="76"
+          rx="2"
+          fill="#F0F2F5"
+          stroke="#22262E"
+          stroke-width="1.5"
+        />
+        <rect
+          x="104"
+          y="108"
+          width="12"
+          height="16"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2"
+        />
+        <path
+          d="M86 134 h48 l-10 -10 h-28 z"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2"
+        />
+        <circle cx="53" cy="104" r="3" fill="#A94E22" />
+      </symbol>
+      <symbol id="i-alim" viewBox="0 0 220 150">
+        <rect
+          x="50"
+          y="30"
+          width="120"
+          height="84"
+          rx="8"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2.5"
+        />
+        <circle
+          cx="110"
+          cy="72"
+          r="26"
+          fill="#F0F2F5"
+          stroke="#22262E"
+          stroke-width="2"
+        />
+        <g stroke="#7A8190" stroke-width="1.5">
+          <path d="M110 72 V46" />
+          <path d="M110 72 V98" />
+          <path d="M110 72 H84" />
+          <path d="M110 72 H136" />
+          <path d="M150 42 v60" />
+          <path d="M158 42 v60" />
+          <path d="M166 42 v60" />
+        </g>
+        <rect x="58" y="102" width="40" height="6" rx="2" fill="#A94E22" />
+        <g fill="none" stroke="#22262E" stroke-width="1.5">
+          <circle cx="58" cy="38" r="2.5" />
+          <circle cx="162" cy="38" r="2.5" />
+          <circle cx="58" cy="106" r="2.5" />
+          <circle cx="162" cy="106" r="2.5" />
+        </g>
+      </symbol>
+      <symbol id="i-cm" viewBox="0 0 220 150">
+        <rect
+          x="35"
+          y="14"
+          width="150"
+          height="122"
+          rx="6"
+          fill="#fff"
+          stroke="#22262E"
+          stroke-width="2.5"
+        />
+        <rect
+          x="150"
+          y="20"
+          width="26"
+          height="90"
+          rx="3"
+          fill="#F0F2F5"
+          stroke="#22262E"
+          stroke-width="1.5"
+        />
+        <rect
+          x="75"
+          y="30"
+          width="34"
+          height="34"
+          rx="3"
+          fill="#F0F2F5"
+          stroke="#22262E"
+          stroke-width="1.5"
+        />
+        <rect
+          x="83"
+          y="38"
+          width="18"
+          height="18"
+          rx="2"
+          fill="#E9CFC0"
+          stroke="#22262E"
+          stroke-width="1.5"
+        />
+        <g fill="#F0F2F5" stroke="#22262E" stroke-width="1.5">
+          <rect x="45" y="80" width="80" height="10" rx="2" />
+          <rect x="45" y="96" width="80" height="10" rx="2" />
+          <rect x="45" y="112" width="80" height="10" rx="2" />
+        </g>
+        <path
+          d="M109 47 H146"
+          fill="none"
+          stroke="#A94E22"
+          stroke-width="1.5"
+        />
+        <circle cx="148" cy="47" r="2.5" fill="#A94E22" />
+        <path
+          d="M109 60 H132 V78"
+          fill="none"
+          stroke="#A94E22"
+          stroke-width="1.5"
+        />
+        <circle cx="132" cy="80" r="2.5" fill="#A94E22" />
+      </symbol>
+    </svg>
+
+    <!-- ================= Symboles SVG (icônes UI) ================= -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="i-loupe" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7" />
+        <path d="M16.5 16.5 21 21" />
+      </symbol>
+      <symbol id="i-panier" viewBox="0 0 24 24">
+        <path
+          d="M3 4h2l2.3 12.1a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 2-1.6L21.6 8H6.2"
+        />
+        <circle cx="9.5" cy="21" r="1.6" />
+        <circle cx="17" cy="21" r="1.6" />
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14" />
+      </symbol>
+      <symbol id="i-moins" viewBox="0 0 24 24"><path d="M5 12h14" /></symbol>
+      <symbol id="i-croix" viewBox="0 0 24 24">
+        <path d="M6 6l12 12M18 6 6 18" />
+      </symbol>
+      <symbol id="i-stylo" viewBox="0 0 24 24">
+        <path d="M17 3l4 4L8 20l-5 1 1-5z" />
+      </symbol>
+      <symbol id="i-poubelle" viewBox="0 0 24 24">
+        <path d="M4 7h16M9 7V5h6v2M6.5 7l.8 13h9.4l.8-13M10 11v6M14 11v6" />
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24">
+        <path d="M5 13l4 4L19 7" />
+      </symbol>
+      <symbol id="i-utilisateur" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4.5 21c1.6-4.2 4.4-6 7.5-6s5.9 1.8 7.5 6" />
+      </symbol>
+      <symbol id="i-colis" viewBox="0 0 24 24">
+        <path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z" />
+        <path d="M3.5 7.5 12 12l8.5-4.5M12 12v9" />
+      </symbol>
+      <symbol id="i-bouclier" viewBox="0 0 24 24">
+        <path d="M12 3l7 3v5c0 4.6-2.9 8-7 10-4.1-2-7-5.4-7-10V6z" />
+        <path d="M9 12l2.2 2.2L15.5 10" />
+      </symbol>
+      <symbol id="i-retour" viewBox="0 0 24 24">
+        <path d="M4 10h13a4 4 0 0 1 0 8h-4" />
+        <path d="M8 6 4 10l4 4" />
+      </symbol>
+      <symbol id="i-clavier-ico" viewBox="0 0 24 24">
+        <rect x="3" y="6" width="18" height="12" rx="2" />
+        <path
+          d="M6 9h.01M9.5 9h.01M13 9h.01M16.5 9h.01M6 12h.01M9.5 12h.01M13 12h.01M16.5 12h.01M7.5 15h9"
+        />
+      </symbol>
+      <symbol id="i-disque-ico" viewBox="0 0 24 24">
+        <rect x="4" y="5" width="16" height="14" rx="2" />
+        <circle cx="9" cy="10" r="2.4" />
+        <path d="M13 15.5h5M13 11.5h3" />
+      </symbol>
+      <symbol id="i-ram-ico" viewBox="0 0 24 24">
+        <rect x="2.5" y="9" width="19" height="6" rx="1.5" />
+        <path d="M5.5 11h1.6M8.9 11h1.6M12.3 11h1.6M15.7 11h1.6M19.1 11h1.6" />
+      </symbol>
+      <symbol id="i-ecran-ico" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="13" rx="2" />
+        <path d="M9 21h6M12 17v4" />
+      </symbol>
+      <symbol id="i-souris-ico" viewBox="0 0 24 24">
+        <rect x="7" y="3" width="10" height="18" rx="5" />
+        <path d="M12 3v5" />
+      </symbol>
+      <symbol id="i-chip-ico" viewBox="0 0 24 24">
+        <rect x="6" y="6" width="12" height="12" rx="1.5" />
+        <rect x="10" y="10" width="4" height="4" />
+        <path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4" />
+      </symbol>
+      <symbol id="i-carte-paiement" viewBox="0 0 24 24">
+        <rect x="2.5" y="5.5" width="19" height="13" rx="2" />
+        <path d="M2.5 10h19M6 15h4" />
+      </symbol>
+      <symbol id="i-banque" viewBox="0 0 24 24">
+        <path d="M3.5 9.5 12 4l8.5 5.5" />
+        <path d="M5.5 12v6M10 12v6M14 12v6M18.5 12v6M3 21h18" />
+      </symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24">
+        <path d="M6 9l6 6 6-6" />
+      </symbol>
+    </svg>
+
+    <!-- ================= Entête client ================= -->
+    <header class="entete" id="entete">
+      <div class="conteneur entete-grille">
+        <a class="logo" href="#/">IT<span class="tire">-</span>equipment</a>
+        <nav class="nav-principale" aria-label="Catalogue">
+          <a class="nav-lien" href="#/boutique">Catalogue</a>
+          <a class="nav-lien" href="#/boutique" data-cat="Stockage">Stockage</a>
+          <a class="nav-lien" href="#/boutique" data-cat="Mémoire">Mémoire</a>
+          <a class="nav-lien" href="#/boutique" data-cat="Claviers">Claviers</a>
+        </nav>
+        <div class="entete-actions">
+          <a
+            class="btn-ico"
+            href="#/boutique"
+            aria-label="Rechercher un produit"
+            ><svg class="icone"><use href="#i-loupe" /></svg
+          ></a>
+          <a
+            class="btn-ico btn-panier"
+            href="#/panier"
+            aria-label="Voir le panier"
+            ><svg class="icone"><use href="#i-panier" /></svg
+            ><span class="badge" id="badge-panier" hidden>0</span></a
+          >
+          <a
+            class="btn btn-fantome"
+            href="#/connexion"
+            style="padding: 9px 14px"
+            ><svg class="icone" style="width: 16px; height: 16px">
+              <use href="#i-utilisateur" /></svg
+            >Espace propriétaire</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ================= Accueil ================= -->
+      <section class="ecran" id="ecran-accueil">
+        <div class="conteneur hero">
+          <div>
+            <h1>Trouvez le bon composant, sans compromis.</h1>
+            <p class="hero-sous">
+              Claviers mécaniques, SSD, mémoire vive, écrans : des composants
+              testés et garantis, expédiés sous 24 h.
+            </p>
+            <form
+              class="form-recherche"
+              id="form-recherche-accueil"
+              role="search"
+            >
+              <input
+                id="recherche-accueil"
+                type="search"
+                placeholder="DDR5 32 Go, SSD NVMe, clavier TKL…"
+                aria-label="Rechercher un composant"
+              />
+              <button type="submit">
+                <svg class="icone" style="width: 17px; height: 17px">
+                  <use href="#i-loupe" /></svg
+                >Rechercher
+              </button>
+            </form>
+            <div class="puces">
+              <a class="puce" href="#/boutique" data-cat="Claviers">Claviers</a>
+              <a class="puce" href="#/boutique" data-cat="Stockage">Stockage</a>
+              <a class="puce" href="#/boutique" data-cat="Mémoire">Mémoire</a>
+              <a class="puce" href="#/boutique" data-cat="Écrans">Écrans</a>
+              <a class="puce" href="#/boutique" data-cat="Périphériques"
+                >Périphériques</a
+              >
+            </div>
+          </div>
+          <article class="carte a-la-une" id="carte-une"></article>
+        </div>
+
+        <div class="conteneur section" style="padding-top: 20px">
+          <div class="trace"></div>
+          <h2 class="titre-section">Catégories</h2>
+          <div class="tuiles-cats" id="tuiles-cats"></div>
+        </div>
+
+        <div class="conteneur section">
+          <div class="trace"></div>
+          <h2 class="titre-section">En ce moment</h2>
+          <div class="grille-cartes" id="grille-accueil"></div>
+        </div>
+
+        <div class="bandeau">
+          <div class="conteneur bandeau-grille">
+            <div class="bandeau-item">
+              <svg class="icone"><use href="#i-colis" /></svg>
+              <div>
+                <h3>Expédié sous 24 h</h3>
+                <p>Commande passée avant 16 h, départ le jour même.</p>
+              </div>
+            </div>
+            <div class="bandeau-item">
+              <svg class="icone"><use href="#i-bouclier" /></svg>
+              <div>
+                <h3>Garantie 2 ans</h3>
+                <p>Pièces et main-d'œuvre incluses.</p>
+              </div>
+            </div>
+            <div class="bandeau-item">
+              <svg class="icone"><use href="#i-retour" /></svg>
+              <div>
+                <h3>Retour 30 jours</h3>
+                <p>Remboursé, sans discussion.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Boutique ================= -->
+      <section class="ecran" id="ecran-boutique">
+        <div class="conteneur boutique-entete">
+          <form
+            class="form-recherche"
+            id="form-recherche-boutique"
+            role="search"
+            style="margin-top: 0"
+          >
+            <input
+              id="recherche-boutique"
+              type="search"
+              placeholder="Chercher un composant…"
+              aria-label="Rechercher un composant"
+            />
+            <button type="submit">
+              <svg class="icone" style="width: 17px; height: 17px">
+                <use href="#i-loupe" /></svg
+              >Rechercher
+            </button>
+          </form>
+        </div>
+        <div class="conteneur boutique-grille">
+          <aside class="filtres" aria-label="Filtres">
+            <div class="groupe-filtre">
+              <h4>Catégorie</h4>
+              <div id="filtres-cats"></div>
+            </div>
+            <div class="groupe-filtre ligne-sep">
+              <h4>Prix</h4>
+              <label class="option"
+                ><input
+                  type="radio"
+                  name="prix"
+                  value=""
+                  data-filtre="prix"
+                  checked
+                />Tous les prix</label
+              >
+              <label class="option"
+                ><input
+                  type="radio"
+                  name="prix"
+                  value="0-75"
+                  data-filtre="prix"
+                />Moins de 75 €</label
+              >
+              <label class="option"
+                ><input
+                  type="radio"
+                  name="prix"
+                  value="75-150"
+                  data-filtre="prix"
+                />75 € à 150 €</label
+              >
+              <label class="option"
+                ><input
+                  type="radio"
+                  name="prix"
+                  value="150-"
+                  data-filtre="prix"
+                />Plus de 150 €</label
+              >
+            </div>
+            <div class="groupe-filtre ligne-sep">
+              <h4>Disponibilité</h4>
+              <label class="option"
+                ><input type="checkbox" data-filtre="stock" />En stock
+                uniquement</label
+              >
+            </div>
+            <div class="groupe-filtre ligne-sep">
+              <button
+                class="lien-muet"
+                data-action="reset-filtres"
+                style="text-align: left"
+              >
+                Réinitialiser les filtres
+              </button>
+            </div>
+          </aside>
+          <div>
+            <div class="ligne-boutique">
+              <h1 id="titre-boutique">Catalogue</h1>
+              <span class="nb-resultats" id="nb-resultats"></span>
+              <select class="tri" id="tri" aria-label="Trier les résultats">
+                <option value="pertinence">Pertinence</option>
+                <option value="prix-asc">Prix croissant</option>
+                <option value="prix-desc">Prix décroissant</option>
+              </select>
+            </div>
+            <div class="grille-cartes" id="grille-boutique"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Fiche produit ================= -->
+      <section class="ecran" id="ecran-produit">
+        <div class="conteneur fiche-haut">
+          <p class="fil-ariane" id="fil-produit"></p>
+          <div class="fiche-grille" id="fiche-contenu"></div>
+        </div>
+      </section>
+
+      <!-- ================= Panier ================= -->
+      <section class="ecran" id="ecran-panier">
+        <div class="conteneur">
+          <div class="titre-page"><h1 style="font-size: 28px">Panier</h1></div>
+          <div id="contenu-panier"></div>
+        </div>
+      </section>
+
+      <!-- ================= Commande ================= -->
+      <section class="ecran" id="ecran-commande">
+        <div class="conteneur">
+          <div class="etapes" id="etapes">
+            <span class="etape">1 Panier</span><span class="etape">/</span>
+            <span class="etape actuel">2 Livraison</span
+            ><span class="etape">/</span>
+            <span class="etape">3 Confirmation</span>
+          </div>
+          <div id="etape-form">
+            <div class="commande-grille">
+              <div>
+                <div class="bloc-form">
+                  <h2>Coordonnées</h2>
+                  <div class="champs">
+                    <div class="champ">
+                      <label for="cmd-email">Adresse e-mail</label
+                      ><input
+                        id="cmd-email"
+                        type="email"
+                        required
+                        placeholder="vous@exemple.fr"
+                      />
+                    </div>
+                    <div class="champ">
+                      <label for="cmd-tel">Téléphone</label
+                      ><input
+                        id="cmd-tel"
+                        type="tel"
+                        placeholder="06 12 34 56 78"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="bloc-form">
+                  <h2>Livraison</h2>
+                  <div class="champs">
+                    <div class="champ pleine">
+                      <label for="cmd-nom">Nom complet</label
+                      ><input
+                        id="cmd-nom"
+                        type="text"
+                        required
+                        placeholder="Alex Martin"
+                      />
+                    </div>
+                    <div class="champ pleine">
+                      <label for="cmd-adresse">Adresse</label
+                      ><input
+                        id="cmd-adresse"
+                        type="text"
+                        required
+                        placeholder="12 rue des Composants"
+                      />
+                    </div>
+                    <div class="champ">
+                      <label for="cmd-cp">Code postal</label
+                      ><input
+                        id="cmd-cp"
+                        type="text"
+                        required
+                        placeholder="75011"
+                      />
+                    </div>
+                    <div class="champ">
+                      <label for="cmd-ville">Ville</label
+                      ><input
+                        id="cmd-ville"
+                        type="text"
+                        required
+                        placeholder="Paris"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="bloc-form">
+                  <h2>Paiement</h2>
+                  <div class="radios-paiement">
+                    <label class="radio-carte"
+                      ><svg class="icone"><use href="#i-carte-paiement" /></svg
+                      >Carte bancaire<input
+                        type="radio"
+                        name="paiement"
+                        value="carte"
+                        checked
+                    /></label>
+                    <label class="radio-carte"
+                      ><svg class="icone"><use href="#i-banque" /></svg
+                      >Virement<input
+                        type="radio"
+                        name="paiement"
+                        value="virement"
+                    /></label>
+                    <label class="radio-carte"
+                      ><span
+                        class="mono"
+                        style="font-weight: 600; font-size: 16px"
+                        >P</span
+                      >PayPal<input type="radio" name="paiement" value="paypal"
+                    /></label>
+                  </div>
+                </div>
+              </div>
+              <div class="carte-resume" id="recap-commande"></div>
+            </div>
+          </div>
+          <div id="etape-confirm" hidden></div>
+        </div>
+      </section>
+
+      <!-- ================= Connexion propriétaire ================= -->
+      <section class="ecran" id="ecran-connexion">
+        <div class="connexion-wrap">
+          <div class="carte-connexion">
+            <a class="logo logo-centre" href="#/"
+              >IT<span class="tire">-</span>equipment</a
+            >
+            <div class="trace trace-centre"></div>
+            <h1>Espace propriétaire</h1>
+            <p class="sous">Gérez le catalogue et suivez les commandes.</p>
+            <form id="form-connexion">
+              <div class="champ">
+                <label for="cx-email">Adresse e-mail</label
+                ><input
+                  id="cx-email"
+                  type="email"
+                  required
+                  value="proprietaire@it-equipment.fr"
+                />
+              </div>
+              <div class="champ">
+                <label for="cx-mdp">Mot de passe</label
+                ><input id="cx-mdp" type="password" required value="••••••••" />
+              </div>
+              <div class="mdp-ligne">
+                <button type="button" class="lien-muet">
+                  Mot de passe oublié ?
+                </button>
+              </div>
+              <label class="case"
+                ><input type="checkbox" checked />Rester connecté</label
+              >
+              <button class="btn btn-cuivre btn-bloc" type="submit">
+                Se connecter
+              </button>
+            </form>
+            <p class="note">
+              Maquette : n'importe quel identifiant fonctionne.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Dashboard propriétaire ================= -->
+      <section class="ecran" id="ecran-dashboard">
+        <div class="admin-grille">
+          <div data-aside></div>
+          <div class="admin-main">
+            <div class="admin-titre">
+              <h1>Vue d'ensemble</h1>
+              <span class="date-admin">mercredi 9 septembre 2026</span>
+            </div>
+            <div class="tuiles-stat">
+              <div class="tuile-stat">
+                <p class="etiquette">CA du mois</p>
+                <p class="valeur">12 480 €</p>
+                <span class="delta hausse">+8,2 % vs août</span>
+              </div>
+              <div class="tuile-stat">
+                <p class="etiquette">Commandes</p>
+                <p class="valeur">96</p>
+                <span class="delta hausse">+12 vs août</span>
+              </div>
+              <div class="tuile-stat">
+                <p class="etiquette">Panier moyen</p>
+                <p class="valeur">130,10 €</p>
+                <span class="delta baisse">−2,1 % vs août</span>
+              </div>
+              <div class="tuile-stat">
+                <p class="etiquette">Stock faible</p>
+                <p class="valeur">3</p>
+                <span class="delta neutre">à réapprovisionner</span>
+              </div>
+            </div>
+            <div class="cartes-admin">
+              <div class="carte-admin">
+                <h3>Ventes</h3>
+                <p class="caption">
+                  Sept derniers jours, en euros. La barre « Aujourd'hui » est
+                  partielle.
+                </p>
+                <div class="graph-wrap">
+                  <div id="graphique-ventes"></div>
+                  <div class="info-vente" id="info-vente" hidden></div>
+                </div>
+              </div>
+              <div class="carte-admin">
+                <h3>Stock faible</h3>
+                <p class="caption">3 produits à réapprovisionner</p>
+                <div class="liste-alertes">
+                  <div class="alerte">
+                    <span class="dot dot-rouge"></span>
+                    <div>
+                      <p class="nom-a">Alimentation 750 W</p>
+                      <p class="qte-a">ALM-G750 — 0 en stock</p>
+                    </div>
+                    <button class="lien-muet" data-cat="Composants">
+                      Réapprovisionner
+                    </button>
+                  </div>
+                  <div class="alerte">
+                    <span class="dot dot-ambre"></span>
+                    <div>
+                      <p class="nom-a">Disque dur 4 To</p>
+                      <p class="qte-a">DDW-4T — 3 en stock</p>
+                    </div>
+                    <button class="lien-muet" data-cat="Stockage">
+                      Réapprovisionner
+                    </button>
+                  </div>
+                  <div class="alerte">
+                    <span class="dot dot-ambre"></span>
+                    <div>
+                      <p class="nom-a">Écran 27 pouces QHD</p>
+                      <p class="qte-a">ECR-27Q — 7 en stock</p>
+                    </div>
+                    <button class="lien-muet" data-cat="Écrans">
+                      Réapprovisionner
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="carte-admin">
+              <h3>Dernières commandes</h3>
+              <p class="caption">Les cinq plus récentes</p>
+              <div class="table-wrap">
+                <table class="tableau">
+                  <thead>
+                    <tr>
+                      <th>Référence</th>
+                      <th>Client</th>
+                      <th>Date</th>
+                      <th>Total</th>
+                      <th>Statut</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mono-muet">CMD-2026-0847</td>
+                      <td>Léa Marchand</td>
+                      <td>8 sept.</td>
+                      <td class="prix-ligne">247,90 €</td>
+                      <td>
+                        <span class="pill pill-verte"
+                          ><span class="dot dot-vert"></span>Payée</span
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="mono-muet">CMD-2026-0846</td>
+                      <td>Karim Bensaid</td>
+                      <td>8 sept.</td>
+                      <td class="prix-ligne">119,90 €</td>
+                      <td>
+                        <span class="pill pill-ambre"
+                          ><span class="dot dot-ambre"></span>En
+                          préparation</span
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="mono-muet">CMD-2026-0845</td>
+                      <td>Julie Petit</td>
+                      <td>7 sept.</td>
+                      <td class="prix-ligne">398,90 €</td>
+                      <td>
+                        <span class="pill pill-grise"
+                          ><span
+                            class="dot"
+                            style="background: var(--encre-3)"
+                          ></span
+                          >Expédiée</span
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="mono-muet">CMD-2026-0844</td>
+                      <td>Thomas Herlin</td>
+                      <td>7 sept.</td>
+                      <td class="prix-ligne">64,90 €</td>
+                      <td>
+                        <span class="pill pill-verte"
+                          ><span class="dot dot-vert"></span>Payée</span
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="mono-muet">CMD-2026-0843</td>
+                      <td>Atelier Pixel</td>
+                      <td>6 sept.</td>
+                      <td class="prix-ligne">1 037,60 €</td>
+                      <td>
+                        <span class="pill pill-verte"
+                          ><span class="dot dot-vert"></span>Payée</span
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= Gestion des produits ================= -->
+      <section class="ecran" id="ecran-admin">
+        <div class="admin-grille">
+          <div data-aside></div>
+          <div class="admin-main">
+            <div class="admin-titre">
+              <h1>Produits</h1>
+              <span class="mono-muet" id="nb-produits"></span>
+              <input
+                class="recherche-admin"
+                style="margin-left: auto"
+                id="admin-recherche"
+                type="search"
+                placeholder="Rechercher un produit…"
+                aria-label="Rechercher dans le catalogue"
+              />
+              <button class="btn btn-cuivre" data-action="ajouter-produit">
+                <svg class="icone" style="width: 16px; height: 16px">
+                  <use href="#i-plus" /></svg
+                >Ajouter un produit
+              </button>
+            </div>
+            <div class="carte-admin">
+              <div class="table-wrap">
+                <table class="tableau" id="tableau-produits">
+                  <thead>
+                    <tr>
+                      <th>Produit</th>
+                      <th>Catégorie</th>
+                      <th>Prix</th>
+                      <th>Stock</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="corps-produits"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ================= Pied de page ================= -->
+    <footer class="pied" id="pied">
+      <div class="conteneur pied-grille">
+        <div>
+          <a class="logo" href="#/">IT<span class="tire">-</span>equipment</a>
+          <p class="pied-texte">
+            Composants informatiques testés et garantis, expédiés depuis notre
+            atelier.
+          </p>
+        </div>
+        <div class="pied-col">
+          <h4>Aide</h4>
+          <a href="#/boutique">Livraison et retours</a>
+          <a href="#/boutique">Garantie</a>
+          <a href="#/boutique">Nous contacter</a>
+        </div>
+        <div class="pied-col">
+          <h4>Compte</h4>
+          <a href="#/connexion">Espace propriétaire</a>
+          <a href="#/panier">Suivre une commande</a>
+        </div>
+        <div class="pied-col">
+          <h4>Légal</h4>
+          <a href="#/boutique">Conditions générales</a>
+          <a href="#/boutique">Confidentialité</a>
+          <a href="#/boutique">Mentions légales</a>
+        </div>
+      </div>
+      <div class="pied-bas">© 2026 IT-equipment</div>
+    </footer>
+
+    <!-- ================= Modales ================= -->
+    <div class="voile" id="voile-produit" hidden>
+      <div
+        class="modale"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mp-titre"
+      >
+        <div class="modale-entete">
+          <h2 id="mp-titre">Ajouter un produit</h2>
+          <button
+            class="btn-ico"
+            data-action="fermer-modale"
+            aria-label="Fermer"
+          >
+            <svg class="icone"><use href="#i-croix" /></svg>
+          </button>
+        </div>
+        <form id="form-produit">
+          <div class="champ pleine">
+            <label for="mp-nom">Nom du produit</label
+            ><input id="mp-nom" required placeholder="SSD NVMe 2 To" />
+          </div>
+          <div class="champ">
+            <label for="mp-ref">Référence</label
+            ><input
+              id="mp-ref"
+              required
+              placeholder="SSV-P41-2T"
+              class="mono"
+            />
+          </div>
+          <div class="champ">
+            <label for="mp-cat">Catégorie</label
+            ><select id="mp-cat"></select>
+          </div>
+          <div class="champ">
+            <label for="mp-prix">Prix (€)</label
+            ><input
+              id="mp-prix"
+              type="number"
+              min="0"
+              step="0.01"
+              required
+              placeholder="149,00"
+            />
+          </div>
+          <div class="champ">
+            <label for="mp-stock">Stock</label
+            ><input
+              id="mp-stock"
+              type="number"
+              min="0"
+              step="1"
+              required
+              placeholder="10"
+            />
+          </div>
+          <div class="champ pleine">
+            <label for="mp-desc">Description</label
+            ><textarea
+              id="mp-desc"
+              rows="3"
+              placeholder="Une phrase pour présenter le produit."
+            ></textarea>
+          </div>
+          <div
+            class="modale-pied pleine"
+            style="justify-content: flex-end; display: flex; gap: 10px"
+          >
+            <button
+              type="button"
+              class="btn btn-fantome"
+              data-action="fermer-modale"
+            >
+              Annuler
+            </button>
+            <button type="submit" class="btn btn-cuivre">
+              Enregistrer le produit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="voile" id="voile-suppr" hidden>
+      <div
+        class="modale petite"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="suppr-titre"
+      >
+        <h2 id="suppr-titre">Supprimer le produit ?</h2>
+        <p id="suppr-texte"></p>
+        <div class="modale-pied">
+          <button class="btn btn-fantome" data-action="fermer-modale-suppr">
+            Annuler
+          </button>
+          <button class="btn btn-rouge" data-action="confirmer-suppression">
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= Toast ================= -->
+    <div class="toast" id="toast" role="status" hidden></div>
+
+    <!-- ================= Barre de navigation du prototype (à retirer pour la vraie app) ================= -->
+    <nav class="proto" id="proto" aria-label="Navigation du prototype">
+      <button
+        class="proto-puce"
+        id="proto-puce"
+        aria-expanded="true"
+        title="Replier la navigation du prototype"
+      >
+        MAQUETTE<svg class="icone"><use href="#i-chevron" /></svg>
+      </button>
+      <div class="proto-sep"></div>
+      <details class="proto-groupe">
+        <summary>Client</summary>
+        <div class="proto-liens">
+          <button data-cible="#/">Accueil</button>
+          <button data-cible="#/boutique">Catalogue</button>
+          <button data-cible="#/produit/ssv-p41-2t">Fiche produit</button>
+          <button data-cible="#/panier">Panier</button>
+          <button data-cible="#/commande">Commande</button>
+        </div>
+      </details>
+      <details class="proto-groupe">
+        <summary>Propriétaire</summary>
+        <div class="proto-liens">
+          <button data-cible="#/connexion">Connexion</button>
+          <button data-cible="#/dashboard">Dashboard</button>
+          <button data-cible="#/admin">Gestion produits</button>
+        </div>
+      </details>
+    </nav>
+
+    <script>
+      "use strict";
+
+      /* ================= Données (fictives, pour la maquette) ================= */
+      const PRODUITS = [
+        {
+          id: "clv-mx87",
+          ref: "CLV-MX87",
+          nom: "Clavier mécanique TKL",
+          cat: "Claviers",
+          prix: 79.9,
+          barre: 94,
+          spec: "Cherry MX Brown, rétroéclairage blanc",
+          stock: 14,
+          illu: "clavier",
+          desc: "Format sans pavé numérique, plaque en acier et touches PBT double injection. Un clavier qui reste précis des années.",
+          fiche: {
+            Format: "TKL, 87 touches",
+            Interrupteurs: "Cherry MX Brown",
+            Rétroéclairage: "LED blanc, 3 niveaux",
+            Connexion: "USB-C détachable",
+            Garantie: "2 ans",
+          },
+        },
+        {
+          id: "clv-k65",
+          ref: "CLV-K65",
+          nom: "Clavier compact 65 %",
+          cat: "Claviers",
+          prix: 64.9,
+          barre: 0,
+          spec: "Switches rouges, format 65 %",
+          stock: 22,
+          illu: "clavier",
+          desc: "Toutes les touches utiles, aucune de trop. Compact au point de tenir dans un sac de portable.",
+          fiche: {
+            Format: "65 %, 68 touches",
+            Interrupteurs: "Switches linéaires rouges",
+            Connexion: "USB-C détachable",
+            Poids: "590 g",
+            Garantie: "2 ans",
+          },
+        },
+        {
+          id: "ssv-p41-2t",
+          ref: "SSV-P41-2T",
+          nom: "SSD NVMe 2 To",
+          cat: "Stockage",
+          prix: 149,
+          barre: 0,
+          spec: "PCIe 4.0, 7 000 Mo/s en lecture",
+          stock: 9,
+          illu: "ssd",
+          desc: "Le stockage qu'il faut pour un poste de montage ou de jeu : 7 000 Mo/s en lecture, cache DRAM et endurance de 1 200 To écrits.",
+          fiche: {
+            Capacité: "2 To",
+            Interface: "PCIe 4.0 x4",
+            "Lecture séquentielle": "7 000 Mo/s",
+            "Écriture séquentielle": "5 100 Mo/s",
+            Garantie: "5 ans",
+          },
+        },
+        {
+          id: "ssv-s1t",
+          ref: "SSV-S1T",
+          nom: "SSD SATA 1 To",
+          cat: "Stockage",
+          prix: 69,
+          barre: 0,
+          spec: "Format 2,5 pouces, 560 Mo/s",
+          stock: 31,
+          illu: "ssd-sata",
+          desc: "Le remplacement idéal d'un disque dur : même format, dix fois plus rapide.",
+          fiche: {
+            Capacité: "1 To",
+            Interface: "SATA III 6 Gb/s",
+            "Lecture séquentielle": "560 Mo/s",
+            Format: "2,5 pouces, 7 mm",
+            Garantie: "3 ans",
+          },
+        },
+        {
+          id: "ddw-4t",
+          ref: "DDW-4T",
+          nom: "Disque dur 4 To",
+          cat: "Stockage",
+          prix: 99,
+          barre: 0,
+          spec: "3,5 pouces, 7 200 tr/min",
+          stock: 3,
+          illu: "hdd",
+          desc: "Pour les archives et les sauvegardes qui ne demandent pas de vitesse, juste de la place.",
+          fiche: {
+            Capacité: "4 To",
+            Vitesse: "7 200 tr/min",
+            Cache: "256 Mo",
+            Format: "3,5 pouces",
+            Garantie: "3 ans",
+          },
+        },
+        {
+          id: "ram-d5-32",
+          ref: "RAM-D5-32",
+          nom: "Mémoire DDR5 32 Go (2 × 16)",
+          cat: "Mémoire",
+          prix: 119.9,
+          barre: 0,
+          spec: "6 000 MHz, CL30",
+          stock: 18,
+          illu: "ram",
+          desc: "Le sweet spot DDR5 : 6 000 MHz en CL30, profil EXPO activable en un réglage.",
+          fiche: {
+            Capacité: "32 Go (2 × 16 Go)",
+            Type: "DDR5 UDIMM",
+            Fréquence: "6 000 MHz",
+            Latence: "CL30",
+            Garantie: "À vie",
+          },
+        },
+        {
+          id: "srs-wl2",
+          ref: "SRS-WL2",
+          nom: "Souris sans fil",
+          cat: "Périphériques",
+          prix: 49.9,
+          barre: 0,
+          spec: "26 000 DPI, 90 g",
+          stock: 26,
+          illu: "souris",
+          desc: "90 grammes, une batterie qui tient six semaines et un capteur qui suit tout.",
+          fiche: {
+            Capteur: "Optique 26 000 DPI",
+            Poids: "90 g",
+            Batterie: "Jusqu'à 6 semaines",
+            Connexion: "2,4 GHz et Bluetooth",
+            Garantie: "2 ans",
+          },
+        },
+        {
+          id: "ecr-27q",
+          ref: "ECR-27Q",
+          nom: "Écran 27 pouces QHD",
+          cat: "Écrans",
+          prix: 229,
+          barre: 0,
+          spec: "IPS, 165 Hz, 1 ms",
+          stock: 7,
+          illu: "ecran",
+          desc: "Dalle IPS rapide et fidèle, pied réglable en hauteur. Pour le jeu comme pour le travail.",
+          fiche: {
+            Taille: "27 pouces",
+            Définition: "2 560 × 1 440",
+            Dalle: "IPS, 165 Hz, 1 ms",
+            Connectique: "HDMI 2.0, DisplayPort 1.4",
+            Garantie: "3 ans",
+          },
+        },
+        {
+          id: "alm-g750",
+          ref: "ALM-G750",
+          nom: "Alimentation 750 W",
+          cat: "Composants",
+          prix: 109.9,
+          barre: 0,
+          spec: "80 Plus Gold, entièrement modulaire",
+          stock: 0,
+          illu: "alim",
+          desc: "Une alimentation silencieuse et modulaire, certifiée 80 Plus Gold, avec 10 ans de garantie.",
+          fiche: {
+            Puissance: "750 W",
+            Certification: "80 Plus Gold",
+            Câblage: "Entièrement modulaire",
+            Ventilateur: "135 mm, semi-passif",
+            Garantie: "10 ans",
+          },
+        },
+        {
+          id: "cmr-b650",
+          ref: "CMR-B650",
+          nom: "Carte mère ATX B650",
+          cat: "Composants",
+          prix: 189,
+          barre: 0,
+          spec: "Socket AM5, DDR5, PCIe 4.0",
+          stock: 12,
+          illu: "cm",
+          desc: "Une base solide pour un PC AM5 : trois slots M.2, Wi-Fi 6E et un BIOS mis à jour sans processeur.",
+          fiche: {
+            Socket: "AM5",
+            Chipset: "B650",
+            Mémoire: "4 × DDR5, 128 Go max",
+            Réseau: "Wi-Fi 6E, 2,5 GbE",
+            Garantie: "3 ans",
+          },
+        },
+      ];
+
+      const CATEGORIES = [
+        "Claviers",
+        "Stockage",
+        "Mémoire",
+        "Écrans",
+        "Périphériques",
+        "Composants",
+      ];
+      const ICONES_CAT = {
+        Claviers: "i-clavier-ico",
+        Stockage: "i-disque-ico",
+        Mémoire: "i-ram-ico",
+        Écrans: "i-ecran-ico",
+        Périphériques: "i-souris-ico",
+        Composants: "i-chip-ico",
+      };
+      const A_LA_UNE = ["ram-d5-32", "ssv-p41-2t", "clv-mx87", "ecr-27q"];
+
+      const panier = new Map(); // id -> quantité
+      const etat = {
+        q: "",
+        cats: new Set(),
+        prix: "",
+        stockSeul: false,
+        tri: "pertinence",
+      };
+      const fmt = (n) =>
+        new Intl.NumberFormat("fr-FR", {
+          style: "currency",
+          currency: "EUR",
+        }).format(n);
+      const $ = (sel) => document.querySelector(sel);
+
+      function statutStock(p) {
+        if (p.stock === 0) return { cls: "dot-rouge", txt: "Rupture" };
+        if (p.stock <= 8) return { cls: "dot-ambre", txt: "Stock faible" };
+        return { cls: "dot-vert", txt: "En stock" };
+      }
+      function iconeProduit(p) {
+        return `<svg class="illu-svg" viewBox="0 0 220 150" role="img" aria-label="Schéma de ${p.nom}"><use href="#i-${p.illu}"/></svg>`;
+      }
+
+      /* ================= Cartes produit ================= */
+      function carteProduit(p, aLaUne) {
+        return `<article class="carte${aLaUne ? " a-la-une" : ""}">
+    <a class="carte-illu" href="#/produit/${p.id}">${aLaUne ? `<span class="tag">Nouveau</span>` : ""}${iconeProduit(p)}</a>
+    <div class="carte-corps">
+      <p class="carte-ref">${p.ref}</p>
+      <h3 class="carte-nom"><a href="#/produit/${p.id}">${p.nom}</a></h3>
+      <p class="carte-spec">${p.spec}</p>
+      <div class="carte-bas">
+        <span class="prix">${p.barre ? `<s class="prix-barre">${fmt(p.barre)}</s>` : ""}${fmt(p.prix)}</span>
+        <button class="btn-ico" data-action="ajouter" data-id="${p.id}" aria-label="Ajouter ${p.nom} au panier"><svg class="icone"><use href="#i-panier"/></svg></button>
+      </div>
+    </div>
+  </article>`;
+      }
+
+      function grilleFiltree() {
+        let liste = PRODUITS.slice();
+        if (etat.q) {
+          const q = etat.q.toLowerCase();
+          liste = liste.filter((p) =>
+            (p.nom + " " + p.ref + " " + p.spec + " " + p.cat)
+              .toLowerCase()
+              .includes(q),
+          );
+        }
+        if (etat.cats.size) liste = liste.filter((p) => etat.cats.has(p.cat));
+        if (etat.prix === "0-75") liste = liste.filter((p) => p.prix < 75);
+        if (etat.prix === "75-150")
+          liste = liste.filter((p) => p.prix >= 75 && p.prix <= 150);
+        if (etat.prix === "150-") liste = liste.filter((p) => p.prix > 150);
+        if (etat.stockSeul) liste = liste.filter((p) => p.stock > 0);
+        if (etat.tri === "prix-asc") liste.sort((a, b) => a.prix - b.prix);
+        if (etat.tri === "prix-desc") liste.sort((a, b) => b.prix - a.prix);
+        return liste;
+      }
+
+      /* ================= Écran accueil ================= */
+      function renduAccueil() {
+        $("#carte-une").innerHTML = carteProduit(
+          PRODUITS.find((p) => p.id === "ram-d5-32"),
+          true,
+        );
+        $("#grille-accueil").innerHTML = A_LA_UNE.map((id) =>
+          carteProduit(PRODUITS.find((p) => p.id === id)),
+        ).join("");
+        $("#tuiles-cats").innerHTML = CATEGORIES.map((c) => {
+          const n = PRODUITS.filter((p) => p.cat === c).length;
+          return `<a class="tuile" href="#/boutique" data-cat="${c}">
+      <svg class="icone"><use href="#${ICONES_CAT[c]}"/></svg>
+      <span class="tuile-nom">${c}</span><span class="tuile-nb">${n} produit${n > 1 ? "s" : ""}</span>
+    </a>`;
+        }).join("");
+      }
+
+      /* ================= Écran boutique ================= */
+      function renduFiltres() {
+        $("#filtres-cats").innerHTML = CATEGORIES.map((c) => {
+          const n = PRODUITS.filter((p) => p.cat === c).length;
+          return `<label class="option"><input type="checkbox" value="${c}" data-filtre="cat" ${etat.cats.has(c) ? "checked" : ""}>${c}<span class="nb">${n}</span></label>`;
+        }).join("");
+      }
+
+      function renduBoutique() {
+        const liste = grilleFiltree();
+        $("#titre-boutique").textContent = etat.q
+          ? `Résultats pour « ${etat.q} »`
+          : "Catalogue";
+        $("#nb-resultats").textContent =
+          `${liste.length} produit${liste.length > 1 ? "s" : ""}`;
+        if (liste.length) {
+          $("#grille-boutique").innerHTML = liste
+            .map((p) => carteProduit(p))
+            .join("");
+        } else {
+          $("#grille-boutique").innerHTML = `<div class="etat-vide">
+      <h3>Aucun produit ne correspond</h3>
+      <p>Essayez un autre terme ou retirez un filtre.</p>
+      <button class="btn" data-action="reset-filtres">Réinitialiser les filtres</button>
+    </div>`;
+        }
+      }
+
+      /* ================= Écran fiche produit ================= */
+      function renduFiche(id) {
+        const p = PRODUITS.find((x) => x.id === id);
+        if (!p) {
+          location.hash = "#/boutique";
+          return;
+        }
+        const st = statutStock(p);
+        $("#fil-produit").innerHTML =
+          `<a href="#/boutique">Catalogue</a> / <a href="#/boutique" data-cat="${p.cat}">${p.cat}</a> / <span class="ici">${p.nom}</span>`;
+        $("#fiche-contenu").innerHTML = `
+    <div class="fiche-visuel">${iconeProduit(p)}</div>
+    <div>
+      <p class="fiche-ref">${p.ref}</p>
+      <h1 class="fiche-titre">${p.nom}</h1>
+      <p class="fiche-desc">${p.desc}</p>
+      <p class="fiche-prix">${p.barre ? `<s class="prix-barre">${fmt(p.barre)}</s>` : ""}${fmt(p.prix)}</p>
+      <p class="statut"><span class="dot ${st.cls}"></span>${st.txt}${p.stock > 0 ? " — expédié sous 24 h" : ""}</p>
+      <div class="fiche-actions">
+        <select class="qte-fiche" id="qte-fiche" aria-label="Quantité">${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => `<option>${n}</option>`).join("")}</select>
+        <button class="btn btn-cuivre" data-action="ajouter" data-id="${p.id}" data-qte-select="#qte-fiche">Ajouter au panier</button>
+      </div>
+      <ul class="garanties">
+        <li><svg class="icone"><use href="#i-check"/></svg>Expédié sous 24 h</li>
+        <li><svg class="icone"><use href="#i-check"/></svg>Garantie ${p.fiche.Garantie}</li>
+        <li><svg class="icone"><use href="#i-check"/></svg>Retour 30 jours</li>
+      </ul>
+    </div>
+    <div class="fiche-table">
+      <h2 class="titre-section" style="font-size:20px">Fiche technique</h2>
+      <table class="table-fiche">
+        <tbody>${Object.entries(p.fiche)
+          .map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`)
+          .join("")}</tbody>
+      </table>
+    </div>`;
+      }
+
+      /* ================= Panier ================= */
+      function totalPanier() {
+        let t = 0;
+        panier.forEach((q, id) => {
+          const p = PRODUITS.find((x) => x.id === id);
+          if (p) t += p.prix * q;
+        });
+        return t;
+      }
+      function nbArticles() {
+        let n = 0;
+        panier.forEach((q) => (n += q));
+        return n;
+      }
+      function majBadge() {
+        const b = $("#badge-panier"),
+          n = nbArticles();
+        b.hidden = n === 0;
+        b.textContent = n;
+      }
+      function lignePanier(id, q) {
+        const p = PRODUITS.find((x) => x.id === id);
+        return `<tr>
+    <td><div class="cellule-produit">
+      <span class="vignette"><svg viewBox="0 0 220 150" aria-hidden="true"><use href="#i-${p.illu}"/></svg></span>
+      <div><p class="nom-cellule">${p.nom}</p><p class="mono-muet">${p.ref}</p></div>
+    </div></td>
+    <td class="prix-ligne">${fmt(p.prix)}</td>
+    <td><div class="qt">
+      <button data-action="dec" data-id="${id}" aria-label="Diminuer la quantité"><svg class="icone" style="width:14px;height:14px"><use href="#i-moins"/></svg></button>
+      <span class="qte-valeur">${q}</span>
+      <button data-action="inc" data-id="${id}" aria-label="Augmenter la quantité"><svg class="icone" style="width:14px;height:14px"><use href="#i-plus"/></svg></button>
+    </div></td>
+    <td class="prix-ligne">${fmt(p.prix * q)}</td>
+    <td><button class="btn-ico" style="width:32px;height:32px" data-action="retirer" data-id="${id}" aria-label="Retirer ${p.nom} du panier"><svg class="icone" style="width:15px;height:15px"><use href="#i-croix"/></svg></button></td>
+  </tr>`;
+      }
+      function renduPanier() {
+        const cible = $("#contenu-panier");
+        if (panier.size === 0) {
+          cible.innerHTML = `<div class="panier-vide">
+      <h2>Votre panier est vide</h2>
+      <p>Parcourez le catalogue pour trouver le composant qu'il vous faut.</p>
+      <a class="btn btn-cuivre" href="#/boutique">Parcourir le catalogue</a>
+    </div>`;
+          return;
+        }
+        const total = totalPanier();
+        cible.innerHTML = `<div class="panier-grille">
+    <div class="carte-resume" style="padding:0;overflow:hidden">
+      <div class="table-wrap"><table class="tableau">
+        <thead><tr><th>Produit</th><th>Prix unitaire</th><th>Quantité</th><th>Total</th><th></th></tr></thead>
+        <tbody>${[...panier.entries()].map(([id, q]) => lignePanier(id, q)).join("")}</tbody>
+      </table></div>
+      <div style="padding:14px 18px;text-align:right"><button class="lien-muet" data-action="vider">Vider le panier</button></div>
+    </div>
+    <div class="carte-resume">
+      <h3>Récapitulatif</h3>
+      <div class="resume-lignes">
+        <div><span>Sous-total</span><span class="prix">${fmt(total)}</span></div>
+        <div><span>Livraison</span><span style="color:var(--vert);font-weight:500">Offerte</span></div>
+      </div>
+      <div class="resume-total"><span>Total</span><span class="prix">${fmt(total)}</span></div>
+      <a class="btn btn-cuivre btn-bloc" href="#/commande">Passer la commande</a>
+      <p class="note-securite">Paiement sécurisé, aucune donnée bancaire stockée.</p>
+      <a class="lien-muet" href="#/boutique">Continuer mes achats</a>
+    </div>
+  </div>`;
+      }
+
+      /* ================= Commande ================= */
+      function renduRecap() {
+        const total = totalPanier();
+        if (panier.size === 0) {
+          $("#recap-commande").innerHTML = `<h3>Votre commande</h3>
+      <p style="color:var(--encre-2);font-size:14.5px;margin:10px 0 16px">Votre panier est vide.</p>
+      <a class="btn btn-bloc" href="#/boutique">Parcourir le catalogue</a>`;
+          return;
+        }
+        $("#recap-commande").innerHTML = `
+    <h3>Votre commande</h3>
+    <div class="recap-lignes">
+      ${[...panier.entries()]
+        .map(([id, q]) => {
+          const p = PRODUITS.find((x) => x.id === id);
+          return `<div class="ligne-recap"><span>${p.nom} × ${q}</span><span class="prix">${fmt(p.prix * q)}</span></div>`;
+        })
+        .join("")}
+    </div>
+    <div class="resume-total"><span>Total</span><span class="prix">${fmt(total)}</span></div>
+    <button class="btn btn-cuivre btn-bloc" data-action="valider-commande">Commander — ${fmt(total)}</button>
+    <p class="note-securite">Paiement sécurisé, aucune donnée bancaire stockée.</p>`;
+      }
+      function confirmerCommande() {
+        const form = { email: $("#cmd-email").value.trim() };
+        if (!form.email) {
+          $("#cmd-email").focus();
+          return;
+        }
+        const total = totalPanier(),
+          n = nbArticles();
+        $("#etape-form").hidden = true;
+        $("#etape-confirm").hidden = false;
+        const etapes = $("#etapes").querySelectorAll(".etape");
+        etapes.forEach((e) => e.classList.remove("actuel"));
+        etapes[4].classList.add("actuel");
+        $("#etape-confirm").innerHTML = `<div class="confirmation">
+    <span class="conf-icone"><svg class="icone"><use href="#i-check"/></svg></span>
+    <h1>Commande confirmée</h1>
+    <p class="conf-ref">CMD-2026-0847</p>
+    <p class="conf-texte">Un récapitulatif est envoyé à <strong>${form.email}</strong>. Livraison estimée : vendredi 11 septembre.</p>
+    <div class="conf-lignes">
+      <div><span>${n} article${n > 1 ? "s" : ""}</span><span class="prix">${fmt(total)}</span></div>
+      <div><span>Livraison</span><span style="color:var(--vert);font-weight:500">Offerte</span></div>
+      <div style="font-weight:600;color:var(--encre)"><span>Total payé</span><span class="prix">${fmt(total)}</span></div>
+    </div>
+    <div class="conf-actions">
+      <a class="btn btn-cuivre" href="#/">Retour à l'accueil</a>
+      <button class="lien-muet" type="button">Suivre la commande</button>
+    </div>
+  </div>`;
+        panier.clear();
+        majBadge();
+        toast("Commande confirmée — CMD-2026-0847");
+      }
+
+      /* ================= Admin ================= */
+      const gabaritAside = `
+  <aside class="side-admin">
+    <a class="logo logo-sombre" href="#/">IT<span class="tire">-</span>equipment</a>
+    <nav class="side-nav" aria-label="Administration">
+      <button class="side-lien" data-cible="#/dashboard">Vue d'ensemble</button>
+      <button class="side-lien" data-cible="#/admin">Produits</button>
+      <span class="side-lien inactif">Commandes</span>
+      <span class="side-lien inactif">Clients</span>
+      <span class="side-lien inactif">Paramètres</span>
+    </nav>
+    <div class="side-bas">
+      <button class="side-lien" data-cible="#/">Voir la boutique</button>
+      <button class="side-lien" data-cible="#/connexion">Se déconnecter</button>
+    </div>
+  </aside>`;
+
+      function renduAdmin() {
+        const q = $("#admin-recherche").value.trim().toLowerCase();
+        const liste = q
+          ? PRODUITS.filter((p) =>
+              (p.nom + " " + p.ref + " " + p.cat).toLowerCase().includes(q),
+            )
+          : PRODUITS;
+        $("#nb-produits").textContent =
+          `${PRODUITS.length} produits au catalogue`;
+        $("#corps-produits").innerHTML = liste
+          .map((p) => {
+            const st = statutStock(p);
+            return `<tr>
+      <td><div class="cellule-produit">
+        <span class="vignette"><svg viewBox="0 0 220 150" aria-hidden="true"><use href="#i-${p.illu}"/></svg></span>
+        <div><p class="nom-cellule">${p.nom}</p><p class="mono-muet">${p.ref}</p></div>
+      </div></td>
+      <td>${p.cat}</td>
+      <td class="prix-ligne">${fmt(p.prix)}</td>
+      <td><span class="statut"><span class="dot ${st.cls}"></span>${st.txt}</span> <span class="mono-muet">${p.stock}</span></td>
+      <td><div class="actions-cell">
+        <button class="btn-ico" data-action="modifier" data-id="${p.id}" aria-label="Modifier ${p.nom}"><svg class="icone" style="width:15px;height:15px"><use href="#i-stylo"/></svg></button>
+        <button class="btn-ico suppr" data-action="supprimer" data-id="${p.id}" aria-label="Supprimer ${p.nom}"><svg class="icone" style="width:15px;height:15px"><use href="#i-poubelle"/></svg></button>
+      </div></td>
+    </tr>`;
+          })
+          .join("");
+      }
+
+      /* ================= Graphique du dashboard ================= */
+      function dessinerVentes() {
+        const cont = $("#graphique-ventes");
+        if (!cont) return;
+        const donnees = [
+          ["Mer 3", 420],
+          ["Jeu 4", 680],
+          ["Ven 5", 540],
+          ["Sam 6", 910],
+          ["Dim 7", 720],
+          ["Lun 8", 1150],
+          ["Auj.", 830],
+        ];
+        const W = 640,
+          H = 210,
+          m = { haut: 18, droite: 12, bas: 30, gauche: 44 };
+        const plotW = W - m.gauche - m.droite,
+          plotH = H - m.haut - m.bas,
+          max = 1200,
+          lw = plotW / donnees.length;
+        let s = `<svg viewBox="0 0 ${W} ${H}" class="graph-svg" role="img" aria-label="Ventes des sept derniers jours, en euros">`;
+        [0, 400, 800, 1200].forEach((v) => {
+          const y = m.haut + plotH - (v / max) * plotH;
+          s += `<line x1="${m.gauche}" y1="${y}" x2="${W - m.droite}" y2="${y}" class="grille"/>`;
+          s += `<text x="${m.gauche - 8}" y="${y + 4}" text-anchor="end" class="axe-txt">${v}</text>`;
+        });
+        donnees.forEach((d, i) => {
+          const x = m.gauche + i * lw + (lw - 46) / 2;
+          const yH = m.haut + plotH - (d[1] / max) * plotH;
+          const yB = m.haut + plotH;
+          const auj = i === donnees.length - 1;
+          s += `<path class="barre${auj ? " barre-auj" : ""}" data-j="${d[0]}" data-v="${d[1]}" d="M${x} ${yB} V${yH + 4} Q${x} ${yH} ${x + 4} ${yH} H${x + 42} Q${x + 46} ${yH} ${x + 46} ${yH + 4} V${yB} Z"/>`;
+          if (d[1] === 1150)
+            s += `<text x="${x + 23}" y="${yH - 8}" text-anchor="middle" class="axe-txt fort">1 150 €</text>`;
+          s += `<text x="${x + 23}" y="${m.haut + plotH + 18}" text-anchor="middle" class="axe-txt">${d[0]}</text>`;
+        });
+        s += `</svg>`;
+        cont.innerHTML = s;
+      }
+
+      /* ================= Modales ================= */
+      function ouvrirModaleProduit(id) {
+        const p = id ? PRODUITS.find((x) => x.id === id) : null;
+        $("#mp-titre").textContent = p
+          ? "Modifier le produit"
+          : "Ajouter un produit";
+        $("#mp-cat").innerHTML = CATEGORIES.map(
+          (c) => `<option ${p && p.cat === c ? "selected" : ""}>${c}</option>`,
+        ).join("");
+        $("#mp-nom").value = p ? p.nom : "";
+        $("#mp-ref").value = p ? p.ref : "";
+        $("#mp-prix").value = p ? String(p.prix) : "";
+        $("#mp-stock").value = p ? p.stock : "";
+        $("#mp-desc").value = p ? p.desc : "";
+        $("#voile-produit").dataset.id = p ? p.id : "";
+        $("#voile-produit").hidden = false;
+        $("#mp-nom").focus();
+      }
+      function fermerModales() {
+        $("#voile-produit").hidden = true;
+        $("#voile-suppr").hidden = true;
+      }
+      function enregistrerProduit() {
+        const id = $("#voile-produit").dataset.id;
+        const donnees = {
+          nom: $("#mp-nom").value.trim(),
+          ref: $("#mp-ref").value.trim().toUpperCase(),
+          cat: $("#mp-cat").value,
+          prix: parseFloat($("#mp-prix").value.replace(",", ".")),
+          stock: parseInt($("#mp-stock").value, 10),
+          desc: $("#mp-desc").value.trim(),
+        };
+        if (
+          !donnees.nom ||
+          !donnees.ref ||
+          isNaN(donnees.prix) ||
+          isNaN(donnees.stock)
+        )
+          return;
+        if (id) {
+          const p = PRODUITS.find((x) => x.id === id);
+          Object.assign(p, donnees);
+          toast(`Produit modifié — ${donnees.ref}`);
+        } else {
+          PRODUITS.unshift({
+            ...donnees,
+            id: donnees.ref.toLowerCase(),
+            barre: 0,
+            spec: "Nouveau produit",
+            illu: "ssd",
+            fiche: { Garantie: "2 ans" },
+          });
+          toast(`Produit enregistré — ${donnees.ref}`);
+        }
+        fermerModales();
+        renduAdmin();
+        renduFiltres();
+        renduBoutique();
+        renduAccueil();
+      }
+
+      /* ================= Toast ================= */
+      let minuterieToast;
+      function toast(msg) {
+        const t = $("#toast");
+        t.textContent = msg;
+        t.hidden = false;
+        requestAnimationFrame(() => t.classList.add("visible"));
+        clearTimeout(minuterieToast);
+        minuterieToast = setTimeout(() => {
+          t.classList.remove("visible");
+          setTimeout(() => (t.hidden = true), 250);
+        }, 2400);
+      }
+
+      /* ================= Routage ================= */
+      function ouvrir(nom, param) {
+        document
+          .querySelectorAll(".ecran")
+          .forEach((e) => e.classList.remove("active"));
+        const cible = $("#ecran-" + nom);
+        if (!cible) return;
+        cible.classList.add("active");
+        const mode =
+          nom === "dashboard" || nom === "admin"
+            ? "admin"
+            : nom === "connexion"
+              ? "connexion"
+              : "client";
+        document.body.dataset.mode = mode;
+        if (nom === "accueil") renduAccueil();
+        if (nom === "boutique") {
+          $("#recherche-boutique").value = etat.q;
+          renduBoutique();
+        }
+        if (nom === "produit") renduFiche(param);
+        if (nom === "panier") renduPanier();
+        if (nom === "commande") {
+          renduRecap();
+          $("#etape-form").hidden = false;
+          $("#etape-confirm").hidden = true;
+          $("#etapes")
+            .querySelectorAll(".etape")
+            .forEach((e) => e.classList.remove("actuel"));
+          $("#etapes").querySelectorAll(".etape")[2].classList.add("actuel");
+        }
+        if (nom === "admin") renduAdmin();
+        if (nom === "dashboard") dessinerVentes();
+        if (mode === "admin") {
+          document.querySelectorAll(".side-lien").forEach((b) => {
+            const h = b.dataset.cible;
+            b.classList.toggle("actif", h === "#/" + nom);
+          });
+        }
+        document.querySelectorAll(".proto-liens button").forEach((b) => {
+          b.classList.toggle(
+            "actif",
+            b.dataset.cible === location.hash ||
+              (nom === "produit" && b.dataset.cible.startsWith("#/produit")),
+          );
+        });
+        window.scrollTo(0, 0);
+      }
+      function router() {
+        const h = location.hash || "#/";
+        let m = h.match(/^#\/produit\/([\w-]+)/);
+        if (m) return ouvrir("produit", m[1]);
+        if (h.startsWith("#/boutique")) return ouvrir("boutique");
+        switch (h) {
+          case "#/":
+            return ouvrir("accueil");
+          case "#/panier":
+            return ouvrir("panier");
+          case "#/commande":
+            return ouvrir("commande");
+          case "#/connexion":
+            return ouvrir("connexion");
+          case "#/dashboard":
+            return ouvrir("dashboard");
+          case "#/admin":
+            return ouvrir("admin");
+          default:
+            return ouvrir("accueil");
+        }
+      }
+
+      /* ================= Événements ================= */
+      function allerBoutique() {
+        $("#recherche-boutique").value = etat.q;
+        renduFiltres();
+        renduBoutique();
+        if (!location.hash.startsWith("#/boutique"))
+          location.hash = "#/boutique";
+      }
+
+      document.addEventListener("click", (e) => {
+        const cat = e.target.closest("[data-cat]");
+        if (cat && !e.target.closest(".proto")) {
+          etat.cats = new Set([cat.dataset.cat]);
+          etat.q = "";
+          document.querySelectorAll('[data-filtre="prix"]').forEach((r) => {
+            if (r.value === "") r.checked = true;
+          });
+          etat.prix = "";
+          allerBoutique();
+          return;
+        }
+        const cible = e.target.closest("[data-cible]");
+        if (cible) {
+          location.hash = cible.dataset.cible;
+          return;
+        }
+        const act = e.target.closest("[data-action]");
+        if (!act) return;
+        const action = act.dataset.action,
+          id = act.dataset.id;
+        if (action === "ajouter") {
+          const select = act.dataset.qteSelect
+            ? $(act.dataset.qteSelect)
+            : null;
+          const qte = select ? parseInt(select.value, 10) : 1;
+          panier.set(id, (panier.get(id) || 0) + qte);
+          majBadge();
+          const p = PRODUITS.find((x) => x.id === id);
+          toast(`Ajouté au panier — ${p.ref}`);
+        }
+        if (action === "inc") {
+          panier.set(id, (panier.get(id) || 1) + 1);
+          renduPanier();
+          majBadge();
+        }
+        if (action === "dec") {
+          const q = panier.get(id) || 1;
+          if (q > 1) {
+            panier.set(id, q - 1);
+            renduPanier();
+            majBadge();
+          }
+        }
+        if (action === "retirer") {
+          panier.delete(id);
+          renduPanier();
+          majBadge();
+          toast("Produit retiré du panier");
+        }
+        if (action === "vider") {
+          panier.clear();
+          renduPanier();
+          majBadge();
+          toast("Panier vidé");
+        }
+        if (action === "valider-commande") confirmerCommande();
+        if (action === "reset-filtres") {
+          etat.q = "";
+          etat.cats = new Set();
+          etat.prix = "";
+          etat.stockSeul = false;
+          etat.tri = "pertinence";
+          $("#recherche-boutique").value = "";
+          $("#tri").value = "pertinence";
+          renduFiltres();
+          renduBoutique();
+        }
+        if (action === "ajouter-produit") ouvrirModaleProduit(null);
+        if (action === "modifier") ouvrirModaleProduit(id);
+        if (action === "supprimer") {
+          const p = PRODUITS.find((x) => x.id === id);
+          $("#suppr-texte").textContent =
+            `« ${p.nom} » sera retiré du catalogue.`;
+          $("#voile-suppr").dataset.id = id;
+          $("#voile-suppr").hidden = false;
+        }
+        if (action === "confirmer-suppression") {
+          const i = PRODUITS.findIndex(
+            (x) => x.id === $("#voile-suppr").dataset.id,
+          );
+          if (i >= 0) {
+            PRODUITS.splice(i, 1);
+            toast("Produit supprimé");
+          }
+          fermerModales();
+          renduAdmin();
+          renduFiltres();
+          renduBoutique();
+          renduAccueil();
+        }
+        if (action === "fermer-modale" || action === "fermer-modale-suppr")
+          fermerModales();
+        if (e.target.classList.contains("voile")) fermerModales();
+      });
+
+      document.addEventListener("change", (e) => {
+        const f = e.target.closest('[data-filtre="cat"]');
+        if (f) {
+          f.checked ? etat.cats.add(f.value) : etat.cats.delete(f.value);
+          renduBoutique();
+          return;
+        }
+        const prix = e.target.closest('[data-filtre="prix"]');
+        if (prix) {
+          etat.prix = prix.value;
+          renduBoutique();
+          return;
+        }
+        const stock = e.target.closest('[data-filtre="stock"]');
+        if (stock) {
+          etat.stockSeul = stock.checked;
+          renduBoutique();
+          return;
+        }
+        if (e.target.id === "tri") {
+          etat.tri = e.target.value;
+          renduBoutique();
+        }
+      });
+
+      document.addEventListener("input", (e) => {
+        if (e.target.id === "recherche-boutique") {
+          etat.q = e.target.value.trim();
+          renduBoutique();
+        }
+        if (e.target.id === "admin-recherche") renduAdmin();
+      });
+
+      document.addEventListener("submit", (e) => {
+        if (
+          e.target.id === "form-recherche-accueil" ||
+          e.target.id === "form-recherche-boutique"
+        ) {
+          e.preventDefault();
+          const champ =
+            e.target.id === "form-recherche-accueil"
+              ? $("#recherche-accueil")
+              : $("#recherche-boutique");
+          etat.q = champ.value.trim();
+          allerBoutique();
+        }
+        if (e.target.id === "form-connexion") {
+          e.preventDefault();
+          toast("Connecté à l'espace propriétaire");
+          location.hash = "#/dashboard";
+        }
+        if (e.target.id === "form-produit") {
+          e.preventDefault();
+          enregistrerProduit();
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") fermerModales();
+      });
+
+      /* Info-bulle du graphique */
+      $("#graphique-ventes").addEventListener("mouseover", (e) => {
+        const barre = e.target.closest(".barre");
+        if (!barre) return;
+        const info = $("#info-vente");
+        info.textContent = `${barre.dataset.j} — ${fmt(parseInt(barre.dataset.v, 10))}`;
+        info.hidden = false;
+        const rect = $("#graphique-ventes").getBoundingClientRect();
+        info.style.left = e.clientX - rect.left + "px";
+        info.style.top = e.clientY - rect.top + "px";
+      });
+      $("#graphique-ventes").addEventListener("mousemove", (e) => {
+        const barre = e.target.closest(".barre");
+        if (!barre) return;
+        const rect = $("#graphique-ventes").getBoundingClientRect();
+        const info = $("#info-vente");
+        info.style.left = e.clientX - rect.left + "px";
+        info.style.top = e.clientY - rect.top + "px";
+      });
+      $("#graphique-ventes").addEventListener("mouseout", (e) => {
+        if (!e.target.closest(".barre")) return;
+        $("#info-vente").hidden = true;
+      });
+
+      /* Repli de la barre prototype */
+      $("#proto-puce").addEventListener("click", () => {
+        const nav = $("#proto"),
+          replie = nav.classList.toggle("replie");
+        $("#proto-puce").setAttribute("aria-expanded", String(!replie));
+        nav
+          .querySelectorAll("details")
+          .forEach((d) => d.removeAttribute("open"));
+      });
+
+      /* Initialisation */
+      document
+        .querySelectorAll("[data-aside]")
+        .forEach((c) => (c.innerHTML = gabaritAside));
+      window.addEventListener("hashchange", router);
+      router();
+    </script>
+  </body>
+</html>
