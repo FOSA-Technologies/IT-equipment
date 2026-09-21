@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
+import { CatalogueEtat } from "@/components/produit/CatalogueEtat";
 import { FilterSidebar } from "@/components/produit/FilterSidebar";
 import { ProductGrid } from "@/components/produit/ProductGrid";
 import { Bouton } from "@/components/ui/Button";
@@ -16,6 +17,7 @@ import { CATEGORIES, type Categorie, type Filtres } from "@/types";
  */
 export function ShopPage() {
   const produits = useCatalogueStore((s) => s.produits);
+  const statut = useCatalogueStore((s) => s.statut);
   const [params, setParams] = useSearchParams();
 
   const [saisie, setSaisie] = useState(params.get("q") ?? "");
@@ -65,6 +67,8 @@ export function ShopPage() {
     const terme = saisie.trim();
     setParams(terme ? { q: terme } : {}, { replace: true });
   }
+
+  if (statut !== "pret") return <CatalogueEtat />;
 
   return (
     <div className="mx-auto max-w-[1180px] px-4 pb-[60px] sm:px-6">

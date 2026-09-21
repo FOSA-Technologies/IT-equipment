@@ -1,6 +1,7 @@
 import { CartEmpty } from "@/components/panier/CartEmpty";
 import { CartLine } from "@/components/panier/CartLine";
 import { CartSummary } from "@/components/panier/CartSummary";
+import { CatalogueEtat } from "@/components/produit/CatalogueEtat";
 import { Bouton } from "@/components/ui/Button";
 import { totalPanier } from "@/domain/panier";
 import { useCatalogueStore } from "@/store/catalogueStore";
@@ -21,6 +22,7 @@ export function CartPage() {
   const retirer = usePanierStore((s) => s.retirer);
   const vider = usePanierStore((s) => s.vider);
   const produits = useCatalogueStore((s) => s.produits);
+  const statut = useCatalogueStore((s) => s.statut);
   const afficherToast = useUiStore((s) => s.afficherToast);
 
   const lignesCompletes: LigneComplet[] = lignes
@@ -36,6 +38,9 @@ export function CartPage() {
     vider();
     afficherToast("Panier vidé");
   }
+
+  // Évite d'afficher « panier vide » pendant le chargement du catalogue.
+  if (lignes.length > 0 && statut !== "pret") return <CatalogueEtat />;
 
   return (
     <div className="mx-auto max-w-[1180px] px-4 py-10 sm:px-6">

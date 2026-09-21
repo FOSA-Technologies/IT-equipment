@@ -3,8 +3,10 @@ import { useState } from "react";
 import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 import { ProductFormModal } from "@/components/admin/ProductFormModal";
 import { ProductsTable } from "@/components/admin/ProductsTable";
+import { CatalogueEtat } from "@/components/produit/CatalogueEtat";
 import { Bouton } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { messageErreur } from "@/lib/http";
 import { useCatalogueStore } from "@/store/catalogueStore";
 import { useUiStore } from "@/store/uiStore";
 import type { Produit, SaisieProduit } from "@/types";
@@ -12,6 +14,7 @@ import type { Produit, SaisieProduit } from "@/types";
 /** Gestion des produits : recherche, ajout, modification, suppression. */
 export function AdminProductsPage() {
   const produits = useCatalogueStore((s) => s.produits);
+  const statutCatalogue = useCatalogueStore((s) => s.statut);
   const ajouterProduit = useCatalogueStore((s) => s.ajouterProduit);
   const modifierProduit = useCatalogueStore((s) => s.modifierProduit);
   const supprimerProduit = useCatalogueStore((s) => s.supprimerProduit);
@@ -21,6 +24,7 @@ export function AdminProductsPage() {
   const [formOuvert, setFormOuvert] = useState(false);
   const [produitEnEdition, setProduitEnEdition] = useState<Produit | null>(null);
   const [produitASupprimer, setProduitASupprimer] = useState<Produit | null>(null);
+  const [enCours, setEnCours] = useState(false);
 
   const terme = recherche.trim().toLowerCase();
   const produitsFiltres = terme
@@ -39,23 +43,41 @@ export function AdminProductsPage() {
     setFormOuvert(true);
   }
 
-  function enregistrer(saisie: SaisieProduit) {
-    if (produitEnEdition) {
-      modifierProduit(produitEnEdition.id, saisie);
-      afficherToast(`Produit modifié — ${saisie.ref}`);
-    } else {
-      ajouterProduit(saisie);
-      afficherToast(`Produit enregistré — ${saisie.ref}`);
+  async function enregistrer(saisie: SaisieProduit) {
+    if (enCours) return;
+    setEnCours(true);
+    try {
+      if (produitEnEdition) {
+        await modifierProduit(produitEnEdition.id, saisie);
+        afficherToast(`Produit modifié — ${saisie.ref}`);
+      } else {
+        await ajouterProduit(saisie);
+        afficherToast(`Produit enregistré — ${saisie.ref}`);
+      }
+      setFormOuvert(false);
+    } catch (e) {
+      // La modale reste ouverte pour permettre de corriger la saisie.
+      afficherToast(messageErreur(e));
+    } finally {
+      setEnCours(false);
     }
-    setFormOuvert(false);
   }
 
-  function confirmerSuppression() {
-    if (!produitASupprimer) return;
-    supprimerProduit(produitASupprimer.id);
-    afficherToast("Produit supprimé");
-    setProduitASupprimer(null);
+  async function confirmerSuppression() {
+    if (!produitASupprimer || enCours) return;
+    setEnCours(true);
+    try {
+      await supprimerProduit(produitASupprimer.id);
+      afficherToast("Produit supprimé");
+      setProduitASupprimer(null);
+    } catch (e) {
+      afficherToast(messageErreur(e));
+    } finally {
+      setEnCours(false);
+    }
   }
+
+  if (statutCatalogue !== "pret") return <CatalogueEtat integre />;
 
   return (
     <>
@@ -93,11 +115,12 @@ export function AdminProductsPage() {
         produit={produitEnEdition}
         onFermer={() => setFormOuvert(false)}
         onEnregistrer={enregistrer}
+        enCours={enCours}
       />
       <DeleteConfirmModal
         ouvert={produitASupprimer !== null}
         produitNom={produitASupprimer?.nom ?? ""}
-        onConfirmer={confirmerSuppression}
+        onConfirmer={() => void confirmerSuppression()}
         onAnnuler={() => setProduitASupprimer(null)}
       />
     </>

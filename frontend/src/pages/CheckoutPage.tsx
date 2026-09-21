@@ -3,13 +3,15 @@ import { Fragment, useState } from "react";
 import { CheckoutForm } from "@/components/commande/CheckoutForm";
 import { OrderConfirmation } from "@/components/commande/OrderConfirmation";
 import { OrderSummary } from "@/components/commande/OrderSummary";
+import { CatalogueEtat } from "@/components/produit/CatalogueEtat";
 import { BoutonLien } from "@/components/ui/Button";
-import { creerReferenceCommande } from "@/domain/commandes";
-import { nbArticles, totalPanier } from "@/domain/panier";
+import { totalPanier } from "@/domain/panier";
+import { api } from "@/lib/api";
+import { ApiError, messageErreur } from "@/lib/http";
 import { useCatalogueStore } from "@/store/catalogueStore";
 import { usePanierStore } from "@/store/panierStore";
 import { useUiStore } from "@/store/uiStore";
-import type { Produit } from "@/types";
+import type { Produit, SaisieCommande } from "@/types";
 
 const ETAPES = ["1 Panier", "2 Livraison", "3 Confirmation"];
 
@@ -18,6 +20,13 @@ interface Confirmation {
   email: string;
   nb: number;
   total: number;
+  livraisonEstimee: string;
+}
+
+interface ProblemeStock {
+  produitId: string;
+  raison: "introuvable" | "stock_insuffisant";
+  disponible?: number;
 }
 
 function Etapes({ actuelle }: { actuelle: number }) {
@@ -35,13 +44,33 @@ function Etapes({ actuelle }: { actuelle: number }) {
   );
 }
 
+/** Message détaillé quand le backend refuse une commande pour cause de stock. */
+function messageStock(erreur: ApiError, produits: Produit[]): string {
+  const problemes = Array.isArray(erreur.details)
+    ? (erreur.details as ProblemeStock[])
+    : [];
+  if (problemes.length === 0) return erreur.message;
+  return problemes
+    .map((p) => {
+      const nom = produits.find((x) => x.id === p.produitId)?.nom ?? p.produitId;
+      if (p.raison === "introuvable") return `${nom} : n'est plus au catalogue`;
+      return p.disponible
+        ? `${nom} : ${p.disponible} disponible${p.disponible > 1 ? "s" : ""}`
+        : `${nom} : en rupture`;
+    })
+    .join(" · ");
+}
+
 /** Commande : formulaire + récapitulatif, puis écran de confirmation. */
 export function CheckoutPage() {
   const lignes = usePanierStore((s) => s.lignes);
   const vider = usePanierStore((s) => s.vider);
   const produits = useCatalogueStore((s) => s.produits);
+  const statutCatalogue = useCatalogueStore((s) => s.statut);
+  const chargerCatalogue = useCatalogueStore((s) => s.charger);
   const afficherToast = useUiStore((s) => s.afficherToast);
   const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
+  const [enCours, setEnCours] = useState(false);
 
   const total = totalPanier(lignes, produits);
   const lignesCompletes = lignes
@@ -53,12 +82,37 @@ export function CheckoutPage() {
       Boolean(x.produit),
     );
 
-  function commander(email: string) {
-    const nb = nbArticles(lignes);
-    const reference = creerReferenceCommande();
-    setConfirmation({ reference, email, nb, total });
-    vider();
-    afficherToast(`Commande confirmée — ${reference}`);
+  async function commander(saisie: SaisieCommande) {
+    if (enCours) return;
+    setEnCours(true);
+    try {
+      const commande = await api.commandes.creer({
+        ...saisie,
+        lignes: lignesCompletes.map(({ produit, quantite }) => ({
+          produitId: produit.id,
+          quantite,
+        })),
+      });
+      setConfirmation({
+        reference: commande.reference,
+        email: commande.email,
+        nb: commande.nbArticles,
+        total: commande.total,
+        livraisonEstimee: commande.livraisonEstimee,
+      });
+      vider();
+      afficherToast(`Commande confirmée — ${commande.reference}`);
+      void chargerCatalogue(); // les stocks ont changé
+    } catch (e) {
+      if (e instanceof ApiError && e.code === "STOCK_INDISPONIBLE") {
+        afficherToast(`Stock insuffisant — ${messageStock(e, produits)}`);
+        void chargerCatalogue();
+      } else {
+        afficherToast(messageErreur(e));
+      }
+    } finally {
+      setEnCours(false);
+    }
   }
 
   if (confirmation) {
@@ -70,9 +124,15 @@ export function CheckoutPage() {
           email={confirmation.email}
           nbArticles={confirmation.nb}
           total={confirmation.total}
+          livraisonEstimee={confirmation.livraisonEstimee}
         />
       </div>
     );
+  }
+
+  // Panier non vide mais catalogue pas encore là : ne pas afficher « panier vide ».
+  if (lignes.length > 0 && statutCatalogue !== "pret") {
+    return <CatalogueEtat />;
   }
 
   if (lignesCompletes.length === 0) {
@@ -97,7 +157,7 @@ export function CheckoutPage() {
       <Etapes actuelle={1} />
       <div className="grid grid-cols-[1fr_360px] items-start gap-8 pb-[60px] max-lg:grid-cols-1">
         <CheckoutForm onCommander={commander} />
-        <OrderSummary lignes={lignesCompletes} total={total} />
+        <OrderSummary lignes={lignesCompletes} total={total} enCours={enCours} />
       </div>
     </div>
   );

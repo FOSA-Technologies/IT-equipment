@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { CatalogueEtat } from "@/components/produit/CatalogueEtat";
 import { ProductIllustration } from "@/components/produit/ProductIllustration";
 import { SpecTable } from "@/components/produit/SpecTable";
 import { Bouton } from "@/components/ui/Button";
@@ -20,9 +21,12 @@ export function ProductPage() {
   const produit = useCatalogueStore((s) =>
     s.produits.find((p) => p.id === id),
   );
+  const statutCatalogue = useCatalogueStore((s) => s.statut);
   const ajouter = usePanierStore((s) => s.ajouter);
   const afficherToast = useUiStore((s) => s.afficherToast);
   const [quantite, setQuantite] = useState(1);
+
+  if (!produit && statutCatalogue !== "pret") return <CatalogueEtat />;
 
   if (!produit) {
     return (

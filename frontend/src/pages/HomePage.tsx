@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { CatalogueEtat } from "@/components/produit/CatalogueEtat";
 import { CategoryTiles } from "@/components/produit/CategoryTiles";
 import { ProductCard } from "@/components/produit/ProductCard";
 import { ProductGrid } from "@/components/produit/ProductGrid";
@@ -41,6 +42,7 @@ const GARANTIES: { icone: IconName; titre: string; texte: string }[] = [
 /** Accueil client : recherche, catégories, produits en vedette. */
 export function HomePage() {
   const produits = useCatalogueStore((s) => s.produits);
+  const statut = useCatalogueStore((s) => s.statut);
   const navigate = useNavigate();
   const [q, setQ] = useState("");
 
@@ -106,7 +108,11 @@ export function HomePage() {
       <div className="mx-auto max-w-[1180px] px-4 pb-14 sm:px-6">
         <Trace />
         <h2 className="mb-[22px] text-2xl font-bold">En ce moment</h2>
-        <ProductGrid produits={vedettes} />
+        {statut === "pret" ? (
+          <ProductGrid produits={vedettes} />
+        ) : (
+          <CatalogueEtat integre />
+        )}
       </div>
 
       <div className="border-y border-ligne bg-white py-[30px]">

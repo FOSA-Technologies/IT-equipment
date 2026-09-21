@@ -3,21 +3,44 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { Bouton } from "@/components/ui/Button";
 import { Trace } from "@/components/ui/Trace";
+import { api } from "@/lib/api";
+import { messageErreur } from "@/lib/http";
 import { useAuthStore } from "@/store/authStore";
 import { useUiStore } from "@/store/uiStore";
 
-/** Connexion du propriétaire (authentification fictive). */
+const CHAMP_INPUT =
+  "w-full rounded-lg border-[1.5px] border-ligne bg-white px-3 py-2.5 text-[15px]";
+
+/** Connexion du propriétaire (JWT délivré par le backend). */
 export function LoginPage() {
-  const seConnecter = useAuthStore((s) => s.seConnecter);
+  const ouvrirSession = useAuthStore((s) => s.ouvrirSession);
   const afficherToast = useUiStore((s) => s.afficherToast);
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [motDePasse, setMotDePasse] = useState("");
   const [resterConnecte, setResterConnecte] = useState(true);
+  const [erreur, setErreur] = useState<string | null>(null);
+  const [enCours, setEnCours] = useState(false);
 
-  function soumettre(e: FormEvent) {
+  async function soumettre(e: FormEvent) {
     e.preventDefault();
-    seConnecter();
-    afficherToast("Connecté à l'espace propriétaire");
-    navigate("/dashboard");
+    if (enCours) return;
+    setEnCours(true);
+    setErreur(null);
+    try {
+      const reponse = await api.auth.connexion(
+        email.trim(),
+        motDePasse,
+        resterConnecte,
+      );
+      ouvrirSession(reponse.token, reponse.utilisateur.email);
+      afficherToast("Connecté à l'espace propriétaire");
+      navigate("/dashboard");
+    } catch (err) {
+      setErreur(messageErreur(err));
+    } finally {
+      setEnCours(false);
+    }
   }
 
   return (
@@ -46,8 +69,11 @@ export function LoginPage() {
               id="cx-email"
               type="email"
               required
-              defaultValue="proprietaire@it-equipment.fr"
-              className="w-full rounded-lg border-[1.5px] border-ligne bg-white px-3 py-2.5 text-[15px]"
+              autoComplete="username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="proprietaire@it-equipment.fr"
+              className={CHAMP_INPUT}
             />
           </div>
           <div className="mb-4 grid gap-1.5">
@@ -58,17 +84,11 @@ export function LoginPage() {
               id="cx-mdp"
               type="password"
               required
-              defaultValue="••••••••"
-              className="w-full rounded-lg border-[1.5px] border-ligne bg-white px-3 py-2.5 text-[15px]"
+              autoComplete="current-password"
+              value={motDePasse}
+              onChange={(e) => setMotDePasse(e.target.value)}
+              className={CHAMP_INPUT}
             />
-            <div className="mt-1 flex justify-end">
-              <button
-                type="button"
-                className="text-[13px] text-encre-3 underline underline-offset-4 hover:text-cuivre"
-              >
-                Mot de passe oublié ?
-              </button>
-            </div>
           </div>
           <label className="mb-5 flex cursor-pointer items-center gap-2.5 text-sm text-encre-2">
             <input
@@ -79,14 +99,22 @@ export function LoginPage() {
             />
             Rester connecté
           </label>
-          <Bouton type="submit" variant="cuivre" className="w-full">
-            Se connecter
+
+          {erreur && (
+            <p role="alert" className="mb-4 text-sm font-medium text-rouge">
+              {erreur}
+            </p>
+          )}
+
+          <Bouton
+            type="submit"
+            variant="cuivre"
+            className="w-full"
+            disabled={enCours}
+          >
+            {enCours ? "Connexion…" : "Se connecter"}
           </Bouton>
         </form>
-
-        <p className="mt-[18px] text-center font-mono text-xs text-encre-3">
-          Maquette : n'importe quel identifiant fonctionne.
-        </p>
       </div>
     </div>
   );
