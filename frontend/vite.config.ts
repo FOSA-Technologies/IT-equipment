@@ -11,4 +11,10 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  server: {
+    // En développement, les appels /api sont relayés vers le backend (pas de CORS à gérer).
+    proxy: {
+      "/api": "http://localhost:3000",
+    },
+  },
 });
