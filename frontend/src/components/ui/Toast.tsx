@@ -6,9 +6,11 @@ function ToastItem({ toast }: { toast: Toast }) {
   const retirerToast = useUiStore((s) => s.retirerToast);
 
   useEffect(() => {
-    const minuterie = setTimeout(() => retirerToast(toast.id), 2400);
+    // Les messages d'erreur, plus longs, restent affichés plus longtemps.
+    const duree = Math.min(8000, Math.max(2400, toast.message.length * 55));
+    const minuterie = setTimeout(() => retirerToast(toast.id), duree);
     return () => clearTimeout(minuterie);
-  }, [toast.id, retirerToast]);
+  }, [toast.id, toast.message, retirerToast]);
 
   return (
     <div
