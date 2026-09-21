@@ -1,4 +1,4 @@
-/** Catalogue initial (repris de frontend/src/data/produits.ts), inséré au premier démarrage. */
+/** Catalogue initial (repris de la maquette), inséré au premier démarrage. */
 export const PRODUITS_INITIAUX = [
   {
     id: "clv-mx87",
