@@ -18,7 +18,7 @@ const ICONE_LIEN =
 /** Entête du site côté client : logo, navigation, recherche, panier. */
 export function Header() {
   const lignes = usePanierStore((s) => s.lignes);
-  const connecte = useAuthStore((s) => s.connecte);
+  const connecte = useAuthStore((s) => s.token !== null);
   const nb = nbArticles(lignes);
 
   return (

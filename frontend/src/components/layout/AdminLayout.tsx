@@ -5,7 +5,7 @@ import { useAuthStore } from "@/store/authStore";
 
 /** Layout des pages propriétaire, protégé : redirige vers la connexion. */
 export function AdminLayout() {
-  const connecte = useAuthStore((s) => s.connecte);
+  const connecte = useAuthStore((s) => s.token !== null);
 
   if (!connecte) {
     return <Navigate to="/connexion" replace />;
