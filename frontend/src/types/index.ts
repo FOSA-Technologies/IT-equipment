@@ -60,3 +60,80 @@ export interface LignePanier {
   produitId: string;
   quantite: number;
 }
+
+/* ------------------------------------------------------------------ */
+/* Contrats de l'API backend                                           */
+/* ------------------------------------------------------------------ */
+
+export type MoyenPaiement = "carte" | "virement" | "paypal";
+
+export type StatutCommande = "Payée" | "En préparation" | "Expédiée";
+
+/** Coordonnées saisies dans le formulaire de commande. */
+export interface SaisieCommande {
+  email: string;
+  tel: string;
+  nom: string;
+  adresse: string;
+  cp: string;
+  ville: string;
+  paiement: MoyenPaiement;
+}
+
+export interface NouvelleCommande extends SaisieCommande {
+  lignes: LignePanier[];
+}
+
+/** Réponse à la création d'une commande (POST /commandes). */
+export interface CommandeCreee {
+  reference: string;
+  statut: StatutCommande;
+  email: string;
+  nbArticles: number;
+  total: number;
+  /** Date ISO AAAA-MM-JJ. */
+  livraisonEstimee: string;
+}
+
+export interface ReponseConnexion {
+  token: string;
+  expiresIn: string;
+  utilisateur: { email: string };
+}
+
+export interface Tuile {
+  valeur: number;
+  precedent: number;
+}
+
+export interface AlerteStock {
+  id: string;
+  ref: string;
+  nom: string;
+  cat: Categorie;
+  stock: number;
+  niveau: "faible" | "rupture";
+}
+
+export interface CommandeRecente {
+  reference: string;
+  client: string;
+  /** Date-heure ISO. */
+  date: string;
+  total: number;
+  statut: StatutCommande;
+}
+
+export interface Dashboard {
+  /** Date-heure ISO du calcul. */
+  date: string;
+  tuiles: {
+    caMois: Tuile & { variationPct: number | null };
+    commandes: Tuile & { variation: number };
+    panierMoyen: Tuile & { variationPct: number | null };
+    stockFaible: { valeur: number };
+  };
+  ventes7Jours: { date: string; valeur: number }[];
+  alertesStock: AlerteStock[];
+  commandesRecentes: CommandeRecente[];
+}
