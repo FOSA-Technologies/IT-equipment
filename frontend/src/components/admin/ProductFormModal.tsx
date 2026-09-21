@@ -51,10 +51,16 @@ interface FormProduitProps {
   produit: Produit | null;
   onEnregistrer: (saisie: SaisieProduit) => void;
   onAnnuler: () => void;
+  enCours: boolean;
 }
 
 /** Contenu du formulaire ; la clé parente le réinitialise entre deux produits. */
-function FormProduit({ produit, onEnregistrer, onAnnuler }: FormProduitProps) {
+function FormProduit({
+  produit,
+  onEnregistrer,
+  onAnnuler,
+  enCours,
+}: FormProduitProps) {
   const [nom, setNom] = useState(produit?.nom ?? "");
   const [ref, setRef] = useState(produit?.ref ?? "");
   const [cat, setCat] = useState<Categorie>(produit?.cat ?? "Stockage");
@@ -153,8 +159,8 @@ function FormProduit({ produit, onEnregistrer, onAnnuler }: FormProduitProps) {
         <Bouton type="button" variant="fantome" onClick={onAnnuler}>
           Annuler
         </Bouton>
-        <Bouton type="submit" variant="cuivre">
-          Enregistrer le produit
+        <Bouton type="submit" variant="cuivre" disabled={enCours}>
+          {enCours ? "Enregistrement…" : "Enregistrer le produit"}
         </Bouton>
       </div>
     </form>
@@ -167,6 +173,8 @@ interface ProductFormModalProps {
   produit: Produit | null;
   onFermer: () => void;
   onEnregistrer: (saisie: SaisieProduit) => void;
+  /** Enregistrement en cours : désactive le bouton d'envoi. */
+  enCours?: boolean;
 }
 
 /** Modale d'ajout / modification d'un produit. */
@@ -175,6 +183,7 @@ export function ProductFormModal({
   produit,
   onFermer,
   onEnregistrer,
+  enCours = false,
 }: ProductFormModalProps) {
   return (
     <Modal ouvert={ouvert} onFermer={onFermer} titreId="titre-form-produit">
@@ -191,6 +200,7 @@ export function ProductFormModal({
         produit={produit}
         onEnregistrer={onEnregistrer}
         onAnnuler={onFermer}
+        enCours={enCours}
       />
     </Modal>
   );

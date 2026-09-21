@@ -1,20 +1,10 @@
 import { formatPrix } from "@/domain/format";
+import type { CommandeRecente } from "@/types";
 
-interface CommandeRecente {
-  ref: string;
-  client: string;
-  date: string;
-  total: number;
-  statut: "Payée" | "En préparation" | "Expédiée";
-}
-
-const COMMANDES: CommandeRecente[] = [
-  { ref: "CMD-2026-0847", client: "Léa Marchand", date: "8 sept.", total: 247.9, statut: "Payée" },
-  { ref: "CMD-2026-0846", client: "Karim Bensaid", date: "8 sept.", total: 119.9, statut: "En préparation" },
-  { ref: "CMD-2026-0845", client: "Julie Petit", date: "7 sept.", total: 398.9, statut: "Expédiée" },
-  { ref: "CMD-2026-0844", client: "Thomas Herlin", date: "7 sept.", total: 64.9, statut: "Payée" },
-  { ref: "CMD-2026-0843", client: "Atelier Pixel", date: "6 sept.", total: 1037.6, statut: "Payée" },
-];
+const FORMAT_JOUR = new Intl.DateTimeFormat("fr-FR", {
+  day: "numeric",
+  month: "short",
+});
 
 const STYLES_STATUT: Record<
   CommandeRecente["statut"],
@@ -25,8 +15,16 @@ const STYLES_STATUT: Record<
   Expédiée: { pilule: "bg-illu text-encre-2", point: "bg-encre-3" },
 };
 
-/** Tableau des cinq commandes les plus récentes (données fictives). */
-export function RecentOrders() {
+interface RecentOrdersProps {
+  commandes: CommandeRecente[];
+}
+
+/** Tableau des commandes les plus récentes. */
+export function RecentOrders({ commandes }: RecentOrdersProps) {
+  if (commandes.length === 0) {
+    return <p className="text-sm text-encre-2">Aucune commande pour le moment.</p>;
+  }
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
@@ -43,15 +41,17 @@ export function RecentOrders() {
           </tr>
         </thead>
         <tbody>
-          {COMMANDES.map((commande) => {
+          {commandes.map((commande) => {
             const style = STYLES_STATUT[commande.statut];
             return (
-              <tr key={commande.ref} className="border-b border-ligne last:border-b-0">
+              <tr key={commande.reference} className="border-b border-ligne last:border-b-0">
                 <td className="px-3.5 py-4 font-mono text-xs text-encre-3">
-                  {commande.ref}
+                  {commande.reference}
                 </td>
                 <td className="px-3.5 py-4 text-[14.5px]">{commande.client}</td>
-                <td className="px-3.5 py-4 text-[14.5px]">{commande.date}</td>
+                <td className="px-3.5 py-4 text-[14.5px]">
+                  {FORMAT_JOUR.format(new Date(commande.date))}
+                </td>
                 <td className="px-3.5 py-4 font-mono font-semibold">
                   {formatPrix(commande.total)}
                 </td>
