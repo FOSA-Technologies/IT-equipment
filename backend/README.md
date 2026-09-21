@@ -91,4 +91,4 @@ Les réponses ont exactement la forme du type `Produit` du frontend. `ref` : let
 - **Le paiement est simulé** : aucune passerelle n'est branchée, une commande est créée directement au statut « Payée » (comme le faisait la maquette).
 - Pas de suivi de commande côté client, pas d'envoi d'e-mail de confirmation.
 - Un seul compte propriétaire, pas de réinitialisation de mot de passe.
-- Le frontend utilise toujours ses stores locaux (zustand + localStorage) : il n'appelle pas encore cette API.
+- Le frontend consomme cette API (proxy Vite `/api` en développement, voir `frontend/README.md`).
