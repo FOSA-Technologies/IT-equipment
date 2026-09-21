@@ -10,6 +10,8 @@ interface PanierState {
   decrementer: (produitId: string) => void;
   retirer: (produitId: string) => void;
   vider: () => void;
+  /** Retire les lignes dont le produit n'existe plus au catalogue. */
+  purger: (idsValides: Set<string>) => void;
 }
 
 /**
@@ -64,6 +66,12 @@ export const usePanierStore = create<PanierState>()(
         })),
 
       vider: () => set({ lignes: [] }),
+
+      purger: (idsValides) =>
+        set((etat) => {
+          const lignes = etat.lignes.filter((l) => idsValides.has(l.produitId));
+          return lignes.length === etat.lignes.length ? etat : { lignes };
+        }),
     }),
     { name: "it-equipment-panier", version: 1 },
   ),
