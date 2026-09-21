@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from "react";
 
 import { Icon, type IconName } from "@/components/ui/Icon";
+import type { MoyenPaiement, SaisieCommande } from "@/types";
 
 const MOYENS_PAIEMENT: {
-  valeur: string;
+  valeur: MoyenPaiement;
   libelle: string;
   icone?: IconName;
   initiale?: string;
@@ -56,12 +57,12 @@ function Champ({
 }
 
 interface CheckoutFormProps {
-  onCommander: (email: string) => void;
+  onCommander: (saisie: SaisieCommande) => void;
 }
 
 /** Formulaire de commande : coordonnées, livraison, paiement. */
 export function CheckoutForm({ onCommander }: CheckoutFormProps) {
-  const [champs, setChamps] = useState({
+  const [champs, setChamps] = useState<SaisieCommande>({
     email: "",
     tel: "",
     nom: "",
@@ -71,13 +72,21 @@ export function CheckoutForm({ onCommander }: CheckoutFormProps) {
     paiement: "carte",
   });
 
-  function maj(nom: string, valeur: string) {
+  function maj(nom: keyof SaisieCommande, valeur: string) {
     setChamps((c) => ({ ...c, [nom]: valeur }));
   }
 
   function soumettre(e: FormEvent) {
     e.preventDefault();
-    onCommander(champs.email.trim());
+    onCommander({
+      ...champs,
+      email: champs.email.trim(),
+      tel: champs.tel.trim(),
+      nom: champs.nom.trim(),
+      adresse: champs.adresse.trim(),
+      cp: champs.cp.trim(),
+      ville: champs.ville.trim(),
+    });
   }
 
   return (

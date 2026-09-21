@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import { BoutonLien } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
-import { dateLivraisonEstimee } from "@/domain/commandes";
+import { formaterDateLivraison } from "@/domain/commandes";
 import { formatPrix } from "@/domain/format";
 
 interface OrderConfirmationProps {
@@ -10,6 +10,8 @@ interface OrderConfirmationProps {
   email: string;
   nbArticles: number;
   total: number;
+  /** Date de livraison estimée (AAAA-MM-JJ), calculée par le backend. */
+  livraisonEstimee: string;
 }
 
 /** Écran de confirmation après validation de la commande. */
@@ -18,8 +20,9 @@ export function OrderConfirmation({
   email,
   nbArticles,
   total,
+  livraisonEstimee,
 }: OrderConfirmationProps) {
-  const livraison = dateLivraisonEstimee();
+  const livraison = formaterDateLivraison(livraisonEstimee);
 
   return (
     <div className="px-6 pb-20 pt-14 text-center">

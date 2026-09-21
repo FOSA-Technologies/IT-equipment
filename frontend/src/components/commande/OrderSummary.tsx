@@ -10,13 +10,19 @@ interface LigneRecap {
 interface OrderSummaryProps {
   lignes: LigneRecap[];
   total: number;
+  /** Commande en cours d'envoi : désactive le bouton. */
+  enCours?: boolean;
 }
 
 /**
  * Récapitulatif de la commande. Le bouton soumet le formulaire voisin
  * (CheckoutForm) via l'attribut HTML `form`.
  */
-export function OrderSummary({ lignes, total }: OrderSummaryProps) {
+export function OrderSummary({
+  lignes,
+  total,
+  enCours = false,
+}: OrderSummaryProps) {
   return (
     <div className="rounded-[10px] border border-ligne bg-white p-[22px]">
       <h3 className="mb-3.5 text-base font-bold">Votre commande</h3>
@@ -44,8 +50,9 @@ export function OrderSummary({ lignes, total }: OrderSummaryProps) {
         form="form-commande"
         variant="cuivre"
         className="mt-[18px] w-full"
+        disabled={enCours}
       >
-        Commander — {formatPrix(total)}
+        {enCours ? "Envoi de la commande…" : `Commander — ${formatPrix(total)}`}
       </Bouton>
       <p className="mt-3 font-mono text-[11.5px] text-encre-3">
         Paiement sécurisé, aucune donnée bancaire stockée.
