@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { RecentOrders } from "@/components/admin/RecentOrders";
 import { SalesChart } from "@/components/admin/SalesChart";
@@ -35,7 +36,9 @@ export function DashboardPage() {
     void charger();
   }, [charger]);
 
-  const date = FORMAT_DATE.format(donnees ? new Date(donnees.date) : new Date());
+  const date = FORMAT_DATE.format(
+    donnees ? new Date(donnees.date) : new Date(),
+  );
 
   return (
     <>
@@ -53,7 +56,10 @@ export function DashboardPage() {
       )}
 
       {!erreur && !donnees && (
-        <EmptyState titre="Chargement…" texte="Calcul des indicateurs en cours." />
+        <EmptyState
+          titre="Chargement…"
+          texte="Calcul des indicateurs en cours."
+        />
       )}
 
       {donnees && (
@@ -73,7 +79,15 @@ export function DashboardPage() {
           </div>
 
           <div className="rounded-[10px] border border-ligne bg-white p-[22px]">
-            <h3 className="text-base font-bold">Dernières commandes</h3>
+            <div className="flex items-baseline justify-between gap-3">
+              <h3 className="text-base font-bold">Dernières commandes</h3>
+              <Link
+                to="/admin/commandes"
+                className="text-[13px] text-cuivre underline underline-offset-4"
+              >
+                Voir toutes les commandes
+              </Link>
+            </div>
             <p className="mb-4 mt-1 font-mono text-[11.5px] text-encre-3">
               Les cinq plus récentes
             </p>
