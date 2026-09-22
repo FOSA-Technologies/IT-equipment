@@ -3,8 +3,8 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 
 const LIENS_ACTIFS = [
-  { to: "/admin/vente", libelle: "Vente" },
   { to: "/dashboard", libelle: "Vue d'ensemble" },
+  { to: "/admin/vente", libelle: "Vente" },
   { to: "/admin", libelle: "Produits" },
   { to: "/admin/commandes", libelle: "Commandes" },
   { to: "/admin/clients", libelle: "Clients" },
