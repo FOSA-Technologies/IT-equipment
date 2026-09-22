@@ -32,7 +32,7 @@ cd frontend && npm run dev       # http://localhost:5173
 
 En développement, Vite relaie `/api` vers `http://localhost:3000` (voir `vite.config.ts`) : aucun réglage CORS n'est nécessaire. En production, définir `VITE_API_URL` (voir `.env.example`) et ajouter l'origine du frontend dans `CORS_ORIGINS` côté backend.
 
-Ce qui passe par l'API : catalogue, gestion des produits (propriétaire), passage de commande (prix et stock validés côté serveur), dashboard, connexion. Le panier reste local au navigateur. Compte propriétaire : celui défini par `ADMIN_EMAIL` / `ADMIN_PASSWORD` dans `backend/.env`.
+Ce qui passe par l'API : catalogue, gestion des produits (propriétaire), passage de commande (prix et stock validés côté serveur), vente au comptoir, suivi des commandes, clients, dashboard, connexion. Le panier reste local au navigateur. Compte propriétaire : celui défini par `ADMIN_EMAIL` / `ADMIN_PASSWORD` dans `backend/.env`.
 
 ## Architecture
 
@@ -45,13 +45,16 @@ Ce qui passe par l'API : catalogue, gestion des produits (propriétaire), passag
 
 ### Routes
 
-| Route | Écran |
-|---|---|
-| `/` | Accueil client |
-| `/boutique` | Catalogue (recherche, filtres, tri) |
-| `/produit/:id` | Fiche produit |
-| `/panier` | Panier |
-| `/commande` | Commande et confirmation |
-| `/connexion` | Connexion propriétaire |
-| `/dashboard` | Tableau de bord (protégé) |
-| `/admin` | Gestion des produits (protégé) |
+| Route              | Écran                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------ |
+| `/`                | Accueil client                                                                             |
+| `/boutique`        | Catalogue (recherche, filtres, tri)                                                        |
+| `/produit/:id`     | Fiche produit                                                                              |
+| `/panier`          | Panier                                                                                     |
+| `/commande`        | Commande et confirmation                                                                   |
+| `/connexion`       | Connexion propriétaire                                                                     |
+| `/dashboard`       | Tableau de bord (protégé)                                                                  |
+| `/admin/vente`     | Caisse : recherche, catégories, panier, encaissement en magasin (protégé)                  |
+| `/admin`           | Gestion des produits (protégé)                                                             |
+| `/admin/commandes` | Suivi des commandes : liste, filtre par statut, détail, changement de statut (protégé)     |
+| `/admin/clients`   | Clients agrégés par e-mail : recherche, fiche détaillée, historique de commandes (protégé) |
