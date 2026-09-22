@@ -4,7 +4,7 @@ interface ModalProps {
   ouvert: boolean;
   onFermer: () => void;
   titreId: string;
-  largeur?: "normale" | "petite";
+  largeur?: "normale" | "petite" | "large";
   children: ReactNode;
 }
 
@@ -27,7 +27,11 @@ export function Modal({
 
   if (!ouvert) return null;
 
-  const largeurClasse = largeur === "petite" ? "w-[420px]" : "w-[520px]";
+  const largeurClasse = {
+    petite: "w-[420px]",
+    normale: "w-[520px]",
+    large: "w-[700px]",
+  }[largeur];
 
   return (
     <div
