@@ -4,10 +4,12 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
+import { createClientsRepo } from "./repositories/clients.js";
 import { createCommandesRepo } from "./repositories/commandes.js";
 import { createProduitsRepo } from "./repositories/produits.js";
 import { createUtilisateursRepo } from "./repositories/utilisateurs.js";
 import { authRouter } from "./routes/auth.js";
+import { clientsRouter } from "./routes/clients.js";
 import { commandesRouter } from "./routes/commandes.js";
 import { dashboardRouter } from "./routes/dashboard.js";
 import { produitsRouter } from "./routes/produits.js";
@@ -18,6 +20,7 @@ export function createApp({ config, db }) {
     config,
     produits: createProduitsRepo(db),
     commandes: createCommandesRepo(db, { timezone: config.timezone }),
+    clients: createClientsRepo(db),
     utilisateurs: createUtilisateursRepo(db),
   };
 
@@ -40,6 +43,7 @@ export function createApp({ config, db }) {
   app.use("/api/auth", authRouter(deps));
   app.use("/api/produits", produitsRouter(deps));
   app.use("/api/commandes", commandesRouter(deps));
+  app.use("/api/clients", clientsRouter(deps));
   app.use("/api/dashboard", dashboardRouter(deps));
 
   app.use(notFoundHandler);
