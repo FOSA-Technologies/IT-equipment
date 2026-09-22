@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS commandes (
   cree_le TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_commandes_cree_le ON commandes (cree_le);
+CREATE INDEX IF NOT EXISTS idx_commandes_email ON commandes (email);
 
 -- Les lignes conservent un instantané (réf., nom, prix) : l'historique reste
 -- valide même si le produit est modifié ou supprimé ensuite.
