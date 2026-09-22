@@ -65,9 +65,15 @@ export interface LignePanier {
 /* Contrats de l'API backend                                           */
 /* ------------------------------------------------------------------ */
 
-export type MoyenPaiement = "carte" | "virement" | "paypal";
+export type MoyenPaiement = "carte" | "virement" | "paypal" | "especes";
 
-export type StatutCommande = "Payée" | "En préparation" | "Expédiée";
+export const STATUTS_COMMANDE = [
+  "Payée",
+  "En préparation",
+  "Expédiée",
+] as const;
+
+export type StatutCommande = (typeof STATUTS_COMMANDE)[number];
 
 /** Coordonnées saisies dans le formulaire de commande. */
 export interface SaisieCommande {
@@ -136,4 +142,78 @@ export interface Dashboard {
   ventes7Jours: { date: string; valeur: number }[];
   alertesStock: AlerteStock[];
   commandesRecentes: CommandeRecente[];
+}
+
+export interface LigneCommande {
+  produitId: string;
+  ref: string;
+  nom: string;
+  prixUnitaire: number;
+  quantite: number;
+}
+
+/** Commande telle que listée par GET /commandes (propriétaire). */
+export interface Commande extends SaisieCommande {
+  reference: string;
+  statut: StatutCommande;
+  nbArticles: number;
+  total: number;
+  /** Date-heure ISO de création. */
+  creeLe: string;
+}
+
+/** Commande avec ses lignes (GET /commandes/:reference). */
+export interface CommandeDetail extends Commande {
+  lignes: LigneCommande[];
+}
+
+export interface PageCommandes {
+  items: Commande[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+/** Réponse à POST /commandes/vente (encaissement au comptoir). */
+export interface VenteCreee {
+  reference: string;
+  statut: StatutCommande;
+  paiement: MoyenPaiement;
+  nbArticles: number;
+  total: number;
+}
+
+export interface Client {
+  email: string;
+  nom: string;
+  tel: string;
+  nbCommandes: number;
+  totalDepense: number;
+  /** Date-heure ISO de la première et de la dernière commande. */
+  premiereCommande: string;
+  derniereCommande: string;
+}
+
+/** Commande listée dans le détail d'un client (mêmes champs que Commande, sans redite email/nom/tel). */
+export interface CommandeClient {
+  reference: string;
+  statut: StatutCommande;
+  total: number;
+  nbArticles: number;
+  creeLe: string;
+  adresse: string;
+  cp: string;
+  ville: string;
+  paiement: MoyenPaiement;
+}
+
+export interface ClientDetail extends Client {
+  commandes: CommandeClient[];
+}
+
+export interface PageClients {
+  items: Client[];
+  total: number;
+  page: number;
+  limit: number;
 }
