@@ -1,9 +1,15 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 
+import { CLIENT_COMPTOIR } from "../domain/commandes.js";
 import { requireAdmin } from "../middleware/auth.js";
 import { parse } from "../middleware/validate.js";
-import { commandeSchema, listeCommandesQuery, statutSchema } from "../schemas.js";
+import {
+  commandeSchema,
+  listeCommandesQuery,
+  statutSchema,
+  venteSchema,
+} from "../schemas.js";
 import { HttpError, notFound } from "../utils/httpError.js";
 
 export function commandesRouter({ config, commandes }) {
@@ -17,12 +23,31 @@ export function commandesRouter({ config, commandes }) {
     legacyHeaders: false,
     skip: () => config.nodeEnv === "test",
     handler: (_req, _res, next) =>
-      next(new HttpError(429, "TROP_DE_REQUETES", "Trop de commandes, réessayez plus tard.")),
+      next(
+        new HttpError(
+          429,
+          "TROP_DE_REQUETES",
+          "Trop de commandes, réessayez plus tard.",
+        ),
+      ),
   });
 
   // Public : passage de commande depuis la boutique.
   router.post("/", limiteur, (req, res) => {
     const commande = commandes.creer(parse(commandeSchema, req.body));
+    res.status(201).json(commande);
+  });
+
+  // Vente au comptoir (caisse propriétaire) : pas de coordonnées client,
+  // articles remis immédiatement, donc statut "Expédiée" dès la création.
+  router.post("/vente", admin, (req, res) => {
+    const { paiement, lignes } = parse(venteSchema, req.body);
+    const commande = commandes.creer({
+      ...CLIENT_COMPTOIR,
+      paiement,
+      statut: "Expédiée",
+      lignes,
+    });
     res.status(201).json(commande);
   });
 
