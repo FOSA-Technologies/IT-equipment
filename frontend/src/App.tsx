@@ -4,7 +4,10 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { ClientLayout } from "@/components/layout/ClientLayout";
 import { ToastHost } from "@/components/ui/Toast";
+import { AdminClientsPage } from "@/pages/AdminClientsPage";
+import { AdminOrdersPage } from "@/pages/AdminOrdersPage";
 import { AdminProductsPage } from "@/pages/AdminProductsPage";
+import { AdminSalePage } from "@/pages/AdminSalePage";
 import { CartPage } from "@/pages/CartPage";
 import { CheckoutPage } from "@/pages/CheckoutPage";
 import { DashboardPage } from "@/pages/DashboardPage";
@@ -44,7 +47,10 @@ export default function App() {
         <Route path="/connexion" element={<LoginPage />} />
         <Route element={<AdminLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/admin/vente" element={<AdminSalePage />} />
           <Route path="/admin" element={<AdminProductsPage />} />
+          <Route path="/admin/commandes" element={<AdminOrdersPage />} />
+          <Route path="/admin/clients" element={<AdminClientsPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
