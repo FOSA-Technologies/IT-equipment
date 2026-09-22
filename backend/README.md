@@ -13,11 +13,11 @@ npm run dev               # http://localhost:3000
 
 Au premier démarrage, la base est créée dans `data/`, remplie avec le catalogue de départ (10 produits, repris de `frontend/src/data/produits.ts`) et le compte propriétaire est créé à partir de `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 
-| Commande | Rôle |
-| --- | --- |
-| `npm run dev` | Serveur avec rechargement automatique |
-| `npm start` | Serveur en production |
-| `npm test` | Tests d'intégration (base en mémoire) |
+| Commande            | Rôle                                                             |
+| ------------------- | ---------------------------------------------------------------- |
+| `npm run dev`       | Serveur avec rechargement automatique                            |
+| `npm start`         | Serveur en production                                            |
+| `npm test`          | Tests d'intégration (base en mémoire)                            |
 | `npm run seed:demo` | Ajoute 45 commandes de démonstration pour alimenter le dashboard |
 
 Générer un secret JWT : `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`
@@ -47,35 +47,51 @@ Les erreurs ont toutes la forme `{ "error": { "code", "message", "details"? } }`
 🔒 = en-tête `Authorization: Bearer <token>` requis.
 
 ### Auth
-| Méthode | Route | Description |
-| --- | --- | --- |
-| POST | `/api/auth/login` | `{ email, motDePasse, resterConnecte? }` → `{ token, expiresIn, utilisateur }` (8 h, ou 30 j avec `resterConnecte`) |
-| GET | `/api/auth/me` 🔒 | Utilisateur connecté |
+
+| Méthode | Route             | Description                                                                                                         |
+| ------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| POST    | `/api/auth/login` | `{ email, motDePasse, resterConnecte? }` → `{ token, expiresIn, utilisateur }` (8 h, ou 30 j avec `resterConnecte`) |
+| GET     | `/api/auth/me` 🔒 | Utilisateur connecté                                                                                                |
 
 ### Produits
-| Méthode | Route | Description |
-| --- | --- | --- |
-| GET | `/api/produits` | Catalogue. Filtres : `q`, `cat` (`Claviers,Stockage` ou répété), `prix` (`0-75` \| `75-150` \| `150-`), `stockSeul=true`, `tri` (`pertinence` \| `prix-asc` \| `prix-desc`) |
-| GET | `/api/produits/categories` | Liste des catégories |
-| GET | `/api/produits/:id` | Détail |
-| POST | `/api/produits` 🔒 | Création. Obligatoires : `nom`, `ref`, `cat`, `prix`, `stock`. Défauts : `spec`, `illu`, `desc`, `fiche` |
-| PUT | `/api/produits/:id` 🔒 | Remplacement des champs du formulaire ; `spec`, `illu`, `fiche`, `prixBarre` sont conservés s'ils sont absents |
-| PATCH | `/api/produits/:id` 🔒 | Modification partielle |
-| DELETE | `/api/produits/:id` 🔒 | Suppression (204) |
+
+| Méthode | Route                      | Description                                                                                                                                                                 |
+| ------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET     | `/api/produits`            | Catalogue. Filtres : `q`, `cat` (`Claviers,Stockage` ou répété), `prix` (`0-75` \| `75-150` \| `150-`), `stockSeul=true`, `tri` (`pertinence` \| `prix-asc` \| `prix-desc`) |
+| GET     | `/api/produits/categories` | Liste des catégories                                                                                                                                                        |
+| GET     | `/api/produits/:id`        | Détail                                                                                                                                                                      |
+| POST    | `/api/produits` 🔒         | Création. Obligatoires : `nom`, `ref`, `cat`, `prix`, `stock`. Défauts : `spec`, `illu`, `desc`, `fiche`                                                                    |
+| PUT     | `/api/produits/:id` 🔒     | Remplacement des champs du formulaire ; `spec`, `illu`, `fiche`, `prixBarre` sont conservés s'ils sont absents                                                              |
+| PATCH   | `/api/produits/:id` 🔒     | Modification partielle                                                                                                                                                      |
+| DELETE  | `/api/produits/:id` 🔒     | Suppression (204)                                                                                                                                                           |
 
 Les réponses ont exactement la forme du type `Produit` du frontend. `ref` : lettres, chiffres, `.`, `-`, `_` (elle devient l'`id` en minuscules) ; `409` si elle existe déjà.
 
 ### Commandes
-| Méthode | Route | Description |
-| --- | --- | --- |
-| POST | `/api/commandes` | Passage de commande (public). Corps : `email, tel?, nom, adresse, cp, ville, paiement (carte\|virement\|paypal), lignes: [{ produitId, quantite }]` |
-| GET | `/api/commandes` 🔒 | Liste paginée : `statut`, `page`, `limit` |
-| GET | `/api/commandes/:reference` 🔒 | Détail avec lignes |
-| PATCH | `/api/commandes/:reference/statut` 🔒 | `{ statut: "Payée" \| "En préparation" \| "Expédiée" }` |
+
+| Méthode | Route                                 | Description                                                                                                                                                    |
+| ------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST    | `/api/commandes`                      | Passage de commande (public). Corps : `email, tel?, nom, adresse, cp, ville, paiement (carte\|virement\|paypal\|especes), lignes: [{ produitId, quantite }]`   |
+| POST    | `/api/commandes/vente` 🔒             | Vente au comptoir (caisse). Corps : `paiement? (défaut especes), lignes`. Pas de coordonnées client (`CLIENT_COMPTOIR` par défaut), statut `Expédiée` immédiat |
+| GET     | `/api/commandes` 🔒                   | Liste paginée : `statut`, `page`, `limit`                                                                                                                      |
+| GET     | `/api/commandes/:reference` 🔒        | Détail avec lignes                                                                                                                                             |
+| PATCH   | `/api/commandes/:reference/statut` 🔒 | `{ statut: "Payée" \| "En préparation" \| "Expédiée" }`                                                                                                        |
 
 À la création, dans une seule transaction : les **prix sont relus en base** (jamais pris du client), le **stock est vérifié puis décrémenté**, la référence est séquentielle (`CMD-AAAA-0001`…). Stock insuffisant ou produit inconnu → `409 STOCK_INDISPONIBLE` avec le détail par ligne, sans rien modifier. Les lignes conservent un instantané (réf., nom, prix) de chaque produit.
 
+Les prix (`produit.prix`, totaux) sont TTC. Le taux de TVA (`domain/commandes.js#TAUX_TVA`, 20 %) sert uniquement à l'affichage (ticket de caisse) : il n'est pas stocké en base.
+
+### Clients
+
+| Méthode | Route                    | Description                                                                                                                      |
+| ------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| GET     | `/api/clients` 🔒        | Liste agrégée (un par e-mail, insensible à la casse), triée par activité récente. Filtres : `q` (e-mail ou nom), `page`, `limit` |
+| GET     | `/api/clients/:email` 🔒 | Fiche client : agrégats (`nbCommandes`, `totalDepense`, `premiereCommande`, `derniereCommande`) + historique de ses commandes    |
+
+Un client n'est pas une entité à part : il est calculé à la volée à partir de la table `commandes`, regroupée par e-mail. La vente au comptoir (`vente-comptoir@it-equipment.local`) apparaît donc elle aussi comme un client, agrégeant toutes les ventes en magasin.
+
 ### Dashboard
+
 `GET /api/dashboard` 🔒 → `tuiles` (CA du mois, commandes, panier moyen avec variation vs mois précédent, nombre de produits en stock faible), `ventes7Jours`, `alertesStock`, `commandesRecentes` (5).
 
 `GET /api/health` → `{ "status": "ok" }`
@@ -89,6 +105,6 @@ Les réponses ont exactement la forme du type `Produit` du frontend. `ref` : let
 ## Limites connues
 
 - **Le paiement est simulé** : aucune passerelle n'est branchée, une commande est créée directement au statut « Payée » (comme le faisait la maquette).
-- Pas de suivi de commande côté client, pas d'envoi d'e-mail de confirmation.
+- Pas de suivi de commande côté client, pas d'envoi d'e-mail de confirmation, pas d'annulation de commande.
 - Un seul compte propriétaire, pas de réinitialisation de mot de passe.
 - Le frontend consomme cette API (proxy Vite `/api` en développement, voir `frontend/README.md`).
