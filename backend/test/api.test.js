@@ -85,12 +85,18 @@ describe("produits", () => {
   });
 
   it("filtre par catégorie, prix, stock et tri", async () => {
-    const res = await api("GET", "/api/produits?cat=Stockage,Composants&stockSeul=true&tri=prix-desc");
+    const res = await api(
+      "GET",
+      "/api/produits?cat=Stockage,Composants&stockSeul=true&tri=prix-desc",
+    );
     assert.equal(res.status, 200);
     const noms = res.body.map((p) => p.ref);
     assert.deepEqual(noms, ["CMR-B650", "SSV-P41-2T", "DDW-4T", "SSV-S1T"]); // ALM-G750 en rupture exclu
     const petits = await api("GET", "/api/produits?prix=0-75&q=souris");
-    assert.deepEqual(petits.body.map((p) => p.ref), ["SRS-WL2"]);
+    assert.deepEqual(
+      petits.body.map((p) => p.ref),
+      ["SRS-WL2"],
+    );
   });
 
   it("rejette une catégorie inconnue", async () => {
@@ -101,7 +107,14 @@ describe("produits", () => {
   it("cycle création / modification / suppression", async () => {
     const creation = await api("POST", "/api/produits", {
       auth: true,
-      body: { nom: "Webcam HD", ref: "CAM-HD1", cat: "Périphériques", prix: 39.9, stock: 5, desc: "Webcam 1080p" },
+      body: {
+        nom: "Webcam HD",
+        ref: "CAM-HD1",
+        cat: "Périphériques",
+        prix: 39.9,
+        stock: 5,
+        desc: "Webcam 1080p",
+      },
     });
     assert.equal(creation.status, 201);
     assert.equal(creation.body.id, "cam-hd1");
@@ -113,29 +126,54 @@ describe("produits", () => {
 
     const doublon = await api("POST", "/api/produits", {
       auth: true,
-      body: { nom: "Autre", ref: "cam-hd1", cat: "Périphériques", prix: 10, stock: 1 },
+      body: {
+        nom: "Autre",
+        ref: "cam-hd1",
+        cat: "Périphériques",
+        prix: 10,
+        stock: 1,
+      },
     });
     assert.equal(doublon.status, 409);
 
     const maj = await api("PUT", "/api/produits/cam-hd1", {
       auth: true,
-      body: { nom: "Webcam Full HD", ref: "CAM-HD1", cat: "Périphériques", prix: 44.9, stock: 8, desc: "MAJ" },
+      body: {
+        nom: "Webcam Full HD",
+        ref: "CAM-HD1",
+        cat: "Périphériques",
+        prix: 44.9,
+        stock: 8,
+        desc: "MAJ",
+      },
     });
     assert.equal(maj.status, 200);
     assert.equal(maj.body.nom, "Webcam Full HD");
     assert.equal(maj.body.spec, "Nouveau produit"); // champs non fournis conservés
 
-    const patch = await api("PATCH", "/api/produits/cam-hd1", { auth: true, body: { stock: 2 } });
+    const patch = await api("PATCH", "/api/produits/cam-hd1", {
+      auth: true,
+      body: { stock: 2 },
+    });
     assert.equal(patch.body.stock, 2);
 
-    assert.equal((await api("DELETE", "/api/produits/cam-hd1", { auth: true })).status, 204);
+    assert.equal(
+      (await api("DELETE", "/api/produits/cam-hd1", { auth: true })).status,
+      204,
+    );
     assert.equal((await api("GET", "/api/produits/cam-hd1")).status, 404);
   });
 
   it("valide les données saisies", async () => {
     const res = await api("POST", "/api/produits", {
       auth: true,
-      body: { nom: "", ref: "réf invalide", cat: "Claviers", prix: -1, stock: 1.5 },
+      body: {
+        nom: "",
+        ref: "réf invalide",
+        cat: "Claviers",
+        prix: -1,
+        stock: 1.5,
+      },
     });
     assert.equal(res.status, 400);
     const champs = res.body.error.details.map((d) => d.champ).sort();
@@ -164,7 +202,9 @@ describe("commandes", () => {
     const apres = (await api("GET", "/api/produits/ssv-s1t")).body.stock;
     assert.equal(apres, avant - 3);
 
-    const suivante = await api("POST", "/api/commandes", { body: commande([{ produitId: "srs-wl2", quantite: 1 }]) });
+    const suivante = await api("POST", "/api/commandes", {
+      body: commande([{ produitId: "srs-wl2", quantite: 1 }]),
+    });
     assert.match(suivante.body.reference, /-0002$/);
   });
 
@@ -179,12 +219,17 @@ describe("commandes", () => {
     });
     assert.equal(res.status, 409);
     assert.equal(res.body.error.code, "STOCK_INDISPONIBLE");
-    assert.deepEqual(res.body.error.details.map((d) => d.raison).sort(), ["introuvable", "stock_insuffisant"]);
+    assert.deepEqual(res.body.error.details.map((d) => d.raison).sort(), [
+      "introuvable",
+      "stock_insuffisant",
+    ]);
     assert.equal((await api("GET", "/api/produits/ddw-4t")).body.stock, avant);
   });
 
   it("valide le formulaire de commande", async () => {
-    const res = await api("POST", "/api/commandes", { body: { ...commande([]), email: "pas-un-mail", paiement: "cheque" } });
+    const res = await api("POST", "/api/commandes", {
+      body: { ...commande([]), email: "pas-un-mail", paiement: "cheque" },
+    });
     assert.equal(res.status, 400);
   });
 
@@ -199,10 +244,24 @@ describe("commandes", () => {
     const detail = await api("GET", `/api/commandes/${ref}`, { auth: true });
     assert.equal(detail.body.lignes[0].ref, "SRS-WL2");
 
-    const maj = await api("PATCH", `/api/commandes/${ref}/statut`, { auth: true, body: { statut: "Expédiée" } });
+    const maj = await api("PATCH", `/api/commandes/${ref}/statut`, {
+      auth: true,
+      body: { statut: "Expédiée" },
+    });
     assert.equal(maj.body.statut, "Expédiée");
-    assert.equal((await api("PATCH", `/api/commandes/${ref}/statut`, { auth: true, body: { statut: "Perdue" } })).status, 400);
-    assert.equal((await api("GET", "/api/commandes/CMD-2000-0001", { auth: true })).status, 404);
+    assert.equal(
+      (
+        await api("PATCH", `/api/commandes/${ref}/statut`, {
+          auth: true,
+          body: { statut: "Perdue" },
+        })
+      ).status,
+      400,
+    );
+    assert.equal(
+      (await api("GET", "/api/commandes/CMD-2000-0001", { auth: true })).status,
+      404,
+    );
   });
 });
 
@@ -218,9 +277,106 @@ describe("dashboard", () => {
     assert.equal(d.ventes7Jours.length, 7);
     assert.equal(d.ventes7Jours.at(-1).valeur, 306.8);
     assert.equal(d.tuiles.stockFaible.valeur, d.alertesStock.length);
-    assert.ok(d.alertesStock.some((a) => a.ref === "ALM-G750" && a.niveau === "rupture"));
+    assert.ok(
+      d.alertesStock.some(
+        (a) => a.ref === "ALM-G750" && a.niveau === "rupture",
+      ),
+    );
     assert.equal(d.commandesRecentes.length, 2);
     assert.equal(d.commandesRecentes[0].client, "Alex Martin");
+  });
+});
+
+describe("vente au comptoir", () => {
+  it("refuse sans authentification", async () => {
+    const res = await api("POST", "/api/commandes/vente", {
+      body: { lignes: [{ produitId: "srs-wl2", quantite: 1 }] },
+    });
+    assert.equal(res.status, 401);
+  });
+
+  it("crée une vente livrée immédiatement, sans coordonnées client", async () => {
+    const avant = (await api("GET", "/api/produits/cmr-b650")).body.stock;
+    const res = await api("POST", "/api/commandes/vente", {
+      auth: true,
+      body: { lignes: [{ produitId: "cmr-b650", quantite: 1 }] },
+    });
+    assert.equal(res.status, 201);
+    assert.equal(res.body.statut, "Expédiée");
+    assert.equal(res.body.nom, "Client comptoir");
+    assert.equal(res.body.paiement, "especes"); // valeur par défaut
+
+    const apres = (await api("GET", "/api/produits/cmr-b650")).body.stock;
+    assert.equal(apres, avant - 1);
+
+    const detail = await api("GET", `/api/commandes/${res.body.reference}`, {
+      auth: true,
+    });
+    assert.equal(detail.body.email, "vente-comptoir@it-equipment.local");
+  });
+
+  it("accepte un autre moyen de paiement et refuse une vente sans ligne", async () => {
+    const carte = await api("POST", "/api/commandes/vente", {
+      auth: true,
+      body: {
+        paiement: "carte",
+        lignes: [{ produitId: "srs-wl2", quantite: 1 }],
+      },
+    });
+    assert.equal(carte.body.paiement, "carte");
+
+    const vide = await api("POST", "/api/commandes/vente", {
+      auth: true,
+      body: { lignes: [] },
+    });
+    assert.equal(vide.status, 400);
+  });
+});
+
+describe("clients", () => {
+  it("refuse sans authentification", async () => {
+    assert.equal((await api("GET", "/api/clients")).status, 401);
+  });
+
+  it("agrège les commandes par e-mail", async () => {
+    const res = await api("GET", "/api/clients", { auth: true });
+    assert.equal(res.status, 200);
+
+    const alex = res.body.items.find((c) => c.email === "client@example.fr");
+    assert.equal(alex.nom, "Alex Martin");
+    assert.equal(alex.nbCommandes, 2);
+    assert.equal(alex.totalDepense, 306.8); // 256,90 + 49,90
+
+    const comptoir = res.body.items.find((c) =>
+      c.email.startsWith("vente-comptoir"),
+    );
+    assert.equal(comptoir.nom, "Client comptoir");
+    assert.equal(comptoir.nbCommandes, 2);
+    assert.equal(comptoir.totalDepense, 238.9); // 189 (CMR-B650) + 49,90 (SRS-WL2)
+  });
+
+  it("filtre par recherche (e-mail ou nom)", async () => {
+    const res = await api("GET", "/api/clients?q=alex", { auth: true });
+    assert.equal(res.body.items.length, 1);
+    assert.equal(res.body.items[0].email, "client@example.fr");
+  });
+
+  it("détaille un client, sans tenir compte de la casse, avec son historique", async () => {
+    const res = await api("GET", "/api/clients/CLIENT@example.FR", {
+      auth: true,
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.nbCommandes, 2);
+    assert.equal(res.body.commandes.length, 2);
+    assert.equal(res.body.commandes[0].reference.startsWith("CMD-"), true);
+  });
+
+  it("renvoie 404 pour un e-mail sans commande", async () => {
+    assert.equal(
+      (await api("GET", "/api/clients/personne@example.fr", { auth: true }))
+        .status,
+      404,
+    );
   });
 });
 
