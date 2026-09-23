@@ -104,7 +104,7 @@ export interface CommandeCreee {
 export interface ReponseConnexion {
   token: string;
   expiresIn: string;
-  utilisateur: { email: string };
+  utilisateur: CompteUtilisateur;
 }
 
 export interface Tuile {
@@ -216,4 +216,30 @@ export interface PageClients {
   total: number;
   page: number;
   limit: number;
+}
+
+/* ------------------------------------------------------------------ */
+/* Paramètres et compte propriétaire                                   */
+/* ------------------------------------------------------------------ */
+
+export type DeviseCode = "EUR" | "MAD" | "USD";
+
+export interface ParametresBoutique {
+  nom: string;
+  ville: string;
+  devise: DeviseCode;
+  /** Pourcentage (0-100). */
+  tva: number;
+}
+
+export interface CompteUtilisateur {
+  email: string;
+  nom: string;
+}
+
+/** Corps de PATCH /auth/me : le nom seul, ou un changement de mot de passe. */
+export interface MajCompte {
+  nom?: string;
+  motDePasseActuel?: string;
+  nouveauMotDePasse?: string;
 }
