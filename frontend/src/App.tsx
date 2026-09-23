@@ -8,6 +8,7 @@ import { AdminClientsPage } from "@/pages/AdminClientsPage";
 import { AdminOrdersPage } from "@/pages/AdminOrdersPage";
 import { AdminProductsPage } from "@/pages/AdminProductsPage";
 import { AdminSalePage } from "@/pages/AdminSalePage";
+import { AdminSettingsPage } from "@/pages/AdminSettingsPage";
 import { CartPage } from "@/pages/CartPage";
 import { CheckoutPage } from "@/pages/CheckoutPage";
 import { DashboardPage } from "@/pages/DashboardPage";
@@ -17,6 +18,7 @@ import { ProductPage } from "@/pages/ProductPage";
 import { ShopPage } from "@/pages/ShopPage";
 import { useCatalogueStore } from "@/store/catalogueStore";
 import { usePanierStore } from "@/store/panierStore";
+import { useParametresStore } from "@/store/parametresStore";
 
 /** Racine de l'application : chargement du catalogue, routes et layouts. */
 export default function App() {
@@ -24,10 +26,12 @@ export default function App() {
   const statut = useCatalogueStore((s) => s.statut);
   const produits = useCatalogueStore((s) => s.produits);
   const purger = usePanierStore((s) => s.purger);
+  const chargerParametres = useParametresStore((s) => s.charger);
 
   useEffect(() => {
     void charger();
-  }, [charger]);
+    void chargerParametres();
+  }, [charger, chargerParametres]);
 
   // Un produit supprimé par le propriétaire ne doit pas rester dans un panier.
   useEffect(() => {
@@ -51,6 +55,7 @@ export default function App() {
           <Route path="/admin" element={<AdminProductsPage />} />
           <Route path="/admin/commandes" element={<AdminOrdersPage />} />
           <Route path="/admin/clients" element={<AdminClientsPage />} />
+          <Route path="/admin/parametres" element={<AdminSettingsPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
