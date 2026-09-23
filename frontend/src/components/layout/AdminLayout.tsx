@@ -2,10 +2,14 @@ import { Navigate, Outlet } from "react-router-dom";
 
 import { AdminSidebar } from "@/components/layout/AdminSidebar";
 import { useAuthStore } from "@/store/authStore";
+import { useParametresStore } from "@/store/parametresStore";
 
 /** Layout des pages propriétaire, protégé : redirige vers la connexion. */
 export function AdminLayout() {
   const connecte = useAuthStore((s) => s.token !== null);
+  // Voir ClientLayout : force le nouveau rendu des prix affichés quand la devise ou la TVA changent.
+  useParametresStore((s) => s.boutique?.devise);
+  useParametresStore((s) => s.boutique?.tva);
 
   if (!connecte) {
     return <Navigate to="/connexion" replace />;
