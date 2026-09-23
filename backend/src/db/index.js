@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS meta (
 CREATE TABLE IF NOT EXISTS utilisateurs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email TEXT NOT NULL UNIQUE COLLATE NOCASE,
+  nom TEXT NOT NULL DEFAULT '',
   mot_de_passe_hash TEXT NOT NULL,
   cree_le TEXT NOT NULL
 );
@@ -82,6 +83,18 @@ export function transaction(db, fn) {
   };
 }
 
+/**
+ * Ajoute les colonnes introduites après la première version du schéma : `CREATE
+ * TABLE IF NOT EXISTS` ne modifie pas une table déjà présente sur une base
+ * existante, il faut donc les ajouter explicitement si elles manquent.
+ */
+function migrer(db) {
+  const colonnes = db.prepare("PRAGMA table_info(utilisateurs)").all();
+  if (!colonnes.some((c) => c.name === "nom")) {
+    db.exec("ALTER TABLE utilisateurs ADD COLUMN nom TEXT NOT NULL DEFAULT ''");
+  }
+}
+
 /** Ouvre la base SQLite (fichier ou ":memory:") et applique le schéma. */
 export function openDatabase(dbPath) {
   if (dbPath !== ":memory:") {
@@ -90,5 +103,6 @@ export function openDatabase(dbPath) {
   const db = new DatabaseSync(dbPath);
   db.exec("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;");
   db.exec(SCHEMA);
+  migrer(db);
   return db;
 }
