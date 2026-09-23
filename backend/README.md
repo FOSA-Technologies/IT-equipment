@@ -11,7 +11,7 @@ cp .env.example .env      # puis renseigner JWT_SECRET et ADMIN_PASSWORD
 npm run dev               # http://localhost:3000
 ```
 
-Au premier démarrage, la base est créée dans `data/`, remplie avec le catalogue de départ (10 produits, repris de `frontend/src/data/produits.ts`) et le compte propriétaire est créé à partir de `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
+Au premier démarrage, la base est créée dans `data/`, remplie avec le catalogue de départ (10 produits, repris de la maquette) et le compte propriétaire est créé à partir de `ADMIN_EMAIL` / `ADMIN_NOM` / `ADMIN_PASSWORD`.
 
 | Commande            | Rôle                                                             |
 | ------------------- | ---------------------------------------------------------------- |
@@ -48,10 +48,11 @@ Les erreurs ont toutes la forme `{ "error": { "code", "message", "details"? } }`
 
 ### Auth
 
-| Méthode | Route             | Description                                                                                                         |
-| ------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| POST    | `/api/auth/login` | `{ email, motDePasse, resterConnecte? }` → `{ token, expiresIn, utilisateur }` (8 h, ou 30 j avec `resterConnecte`) |
-| GET     | `/api/auth/me` 🔒 | Utilisateur connecté                                                                                                |
+| Méthode | Route             | Description                                                                                                                              |
+| ------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| POST    | `/api/auth/login` | `{ email, motDePasse, resterConnecte? }` → `{ token, expiresIn, utilisateur }` (8 h, ou 30 j avec `resterConnecte`)                      |
+| GET     | `/api/auth/me` 🔒 | Utilisateur connecté (`{ email, nom }`)                                                                                                  |
+| PATCH   | `/api/auth/me` 🔒 | Modifie le compte. `{ nom? }` et/ou `{ motDePasseActuel, nouveauMotDePasse }` (le mot de passe actuel est vérifié avant tout changement) |
 
 ### Produits
 
@@ -79,7 +80,7 @@ Les réponses ont exactement la forme du type `Produit` du frontend. `ref` : let
 
 À la création, dans une seule transaction : les **prix sont relus en base** (jamais pris du client), le **stock est vérifié puis décrémenté**, la référence est séquentielle (`CMD-AAAA-0001`…). Stock insuffisant ou produit inconnu → `409 STOCK_INDISPONIBLE` avec le détail par ligne, sans rien modifier. Les lignes conservent un instantané (réf., nom, prix) de chaque produit.
 
-Les prix (`produit.prix`, totaux) sont TTC. Le taux de TVA (`domain/commandes.js#TAUX_TVA`, 20 %) sert uniquement à l'affichage (ticket de caisse) : il n'est pas stocké en base.
+Les prix (`produit.prix`, totaux) sont TTC. Le taux de TVA affiché sur le ticket (POS) vient des paramètres de la boutique (`GET /api/parametres/boutique#tva`, 20 % par défaut) : il n'est pas stocké avec la commande elle-même.
 
 ### Clients
 
@@ -89,6 +90,15 @@ Les prix (`produit.prix`, totaux) sont TTC. Le taux de TVA (`domain/commandes.js
 | GET     | `/api/clients/:email` 🔒 | Fiche client : agrégats (`nbCommandes`, `totalDepense`, `premiereCommande`, `derniereCommande`) + historique de ses commandes    |
 
 Un client n'est pas une entité à part : il est calculé à la volée à partir de la table `commandes`, regroupée par e-mail. La vente au comptoir (`vente-comptoir@it-equipment.local`) apparaît donc elle aussi comme un client, agrégeant toutes les ventes en magasin.
+
+### Paramètres
+
+| Méthode | Route                         | Description                                                                                                          |
+| ------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| GET     | `/api/parametres/boutique`    | Paramètres de la boutique (`nom, ville, devise, tva`), publique : la devise et la TVA servent à l'affichage des prix |
+| PUT     | `/api/parametres/boutique` 🔒 | Modifie ces paramètres. `devise` ∈ `EUR \| MAD \| USD`, `tva` en pourcentage (0-100)                                 |
+
+Stockés dans la table `meta` (pas de table dédiée) ; voir la remarque plus haut sur les prix TTC et la TVA.
 
 ### Dashboard
 
