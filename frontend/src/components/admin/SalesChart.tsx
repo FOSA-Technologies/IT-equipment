@@ -1,6 +1,6 @@
 import { useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 
-import { formatPrix } from "@/domain/format";
+import { DEVISES, deviseActuelle, formatPrix } from "@/domain/format";
 import type { Dashboard } from "@/types";
 
 type VenteJour = Dashboard["ventes7Jours"][number];
@@ -55,7 +55,10 @@ export function SalesChart({ ventes }: SalesChartProps) {
   const maxValeur = Math.max(0, ...ventes.map((v) => v.valeur));
   const pas = pasGraduation(maxValeur);
   const plafond = pas * NB_GRADUATIONS;
-  const graduations = Array.from({ length: NB_GRADUATIONS + 1 }, (_, i) => i * pas);
+  const graduations = Array.from(
+    { length: NB_GRADUATIONS + 1 },
+    (_, i) => i * pas,
+  );
 
   const plotW = LARGEUR - MARGES.gauche - MARGES.droite;
   const plotH = HAUTEUR - MARGES.haut - MARGES.bas;
@@ -104,7 +107,9 @@ export function SalesChart({ ventes }: SalesChartProps) {
           const estPartielle = i === ventes.length - 1;
           const jour = libelleJour(vente.date, estPartielle);
           const x =
-            MARGES.gauche + i * largeurColonne + (largeurColonne - LARGEUR_BARRE) / 2;
+            MARGES.gauche +
+            i * largeurColonne +
+            (largeurColonne - LARGEUR_BARRE) / 2;
           const yH = yBase - (vente.valeur / plafond) * plotH;
           const estPic = vente.valeur > 0 && vente.valeur === maxValeur;
 
@@ -131,7 +136,8 @@ export function SalesChart({ ventes }: SalesChartProps) {
                   textAnchor="middle"
                   className="fill-encre font-mono text-[11px] font-semibold"
                 >
-                  {FORMAT_ENTIER.format(vente.valeur)} €
+                  {FORMAT_ENTIER.format(vente.valeur)}{" "}
+                  {DEVISES[deviseActuelle()].symbole}
                 </text>
               )}
               <text

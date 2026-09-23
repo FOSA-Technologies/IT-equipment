@@ -3,7 +3,13 @@ import { useState, type FormEvent } from "react";
 import { Bouton, BoutonIcone } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Modal } from "@/components/ui/Modal";
-import { CATEGORIES, type Categorie, type Produit, type SaisieProduit } from "@/types";
+import { DEVISES, deviseActuelle } from "@/domain/format";
+import {
+  CATEGORIES,
+  type Categorie,
+  type Produit,
+  type SaisieProduit,
+} from "@/types";
 
 const CHAMP_INPUT =
   "w-full rounded-lg border-[1.5px] border-ligne bg-white px-3 py-2.5 text-[15px]";
@@ -91,7 +97,10 @@ function FormProduit({
   }
 
   return (
-    <form onSubmit={soumettre} className="grid grid-cols-2 gap-3.5 max-sm:grid-cols-1">
+    <form
+      onSubmit={soumettre}
+      className="grid grid-cols-2 gap-3.5 max-sm:grid-cols-1"
+    >
       <Champ
         id="mp-nom"
         label="Nom du produit"
@@ -126,7 +135,7 @@ function FormProduit({
       </div>
       <Champ
         id="mp-prix"
-        label="Prix (€)"
+        label={`Prix (${DEVISES[deviseActuelle()].symbole})`}
         type="number"
         valeur={prix}
         onChange={setPrix}
