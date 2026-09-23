@@ -4,8 +4,17 @@ import { persist } from "zustand/middleware";
 interface AuthState {
   token: string | null;
   email: string | null;
-  ouvrirSession: (token: string, email: string) => void;
+  nom: string | null;
+  ouvrirSession: (token: string, email: string, nom: string) => void;
   seDeconnecter: () => void;
+  /** Reflète un changement de nom (PATCH /auth/me) sans rouvrir de session. */
+  definirNom: (nom: string) => void;
+}
+
+interface EtatPersisteAnterieur {
+  token?: string | null;
+  email?: string | null;
+  nom?: string | null;
 }
 
 /**
@@ -17,14 +26,25 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       token: null,
       email: null,
-      ouvrirSession: (token, email) => set({ token, email }),
-      seDeconnecter: () => set({ token: null, email: null }),
+      nom: null,
+      ouvrirSession: (token, email, nom) => set({ token, email, nom }),
+      seDeconnecter: () => set({ token: null, email: null, nom: null }),
+      definirNom: (nom) => set({ nom }),
     }),
     {
       name: "it-equipment-auth",
-      version: 2,
-      // v1 (authentification fictive) : on repart d'une session vide.
-      migrate: () => ({ token: null, email: null }),
+      version: 3,
+      migrate: (persiste, version) => {
+        // v1 (authentification fictive) : on repart d'une session vide.
+        if (version < 2) return { token: null, email: null, nom: null };
+        // v2 : session valide, sans nom (champ ajouté en v3) — conservée telle quelle.
+        const anterieur = persiste as EtatPersisteAnterieur;
+        return {
+          token: anterieur.token ?? null,
+          email: anterieur.email ?? null,
+          nom: anterieur.nom ?? null,
+        };
+      },
     },
   ),
 );
