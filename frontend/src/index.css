@@ -1,18 +1,66 @@
 @import "tailwindcss";
 
-/* Jetons de design IT-equipment — identité visuelle de la maquette */
+/*
+ * Jetons de design IT-equipment — identité de marque FOSA.
+ *
+ * Les couleurs et polices brutes (fosa-*, navy-*, surface, ink, line,
+ * shadow-*, font-sans, font-robot) sont celles de la charte FOSA. Les jetons
+ * sémantiques utilisés dans les composants (encre, cuivre, sombre, ligne,
+ * illu, fond, font-titre…) sont des alias qui y puisent, pour que toute
+ * l'interface se retheme sans toucher aux composants.
+ */
 @theme {
-  --color-encre: #22262e;
-  --color-encre-2: #4b5261;
-  --color-encre-3: #7a8190;
-  --color-fond: #f5f6f8;
-  --color-ligne: #e3e6eb;
-  --color-illu: #eff1f4;
-  --color-sombre: #1e2127;
-  --color-cuivre: #a94e22;
-  --color-cuivre-fonce: #8c3e1b;
-  --color-cuivre-pale: #c98a63;
-  --color-cuivre-clair: #e9cfc0;
+  /* Orange FOSA */
+  --color-fosa-50: #fff5ed;
+  --color-fosa-100: #ffe7d3;
+  --color-fosa-200: #ffd0a8;
+  --color-fosa-300: #ff9d5c;
+  --color-fosa-400: #ff6a1f; /* orange clair, texte sur fond navy */
+  --color-fosa-500: #ff5a00; /* orange principal */
+  --color-fosa-600: #e84e00; /* hover + grands textes sur fond clair */
+  --color-fosa-700: #c94300; /* texte orange accessible sur fond clair */
+  --color-fosa-800: #a33600;
+
+  /* Navy FOSA */
+  --color-navy-700: #1b2a42;
+  --color-navy-800: #162033;
+  --color-navy-900: #0b1424;
+
+  /* Neutres */
+  --color-surface: #f6f7f9;
+  --color-ink: #4b5563;
+  --color-line: #e6e9ef;
+
+  --shadow-card:
+    0 1px 2px rgb(11 20 36 / 0.04), 0 8px 24px -12px rgb(11 20 36 / 0.12);
+  --shadow-soft:
+    0 1px 1px rgb(11 20 36 / 0.03), 0 16px 40px -20px rgb(11 20 36 / 0.18);
+
+  --font-sans:
+    "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Wordmark robotique (Orbitron) */
+  --font-robot:
+    "Orbitron Variable", "Inter Variable", ui-sans-serif, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* --- Jetons sémantiques, utilisés dans les composants --- */
+  --color-encre: var(--color-navy-900);
+  --color-encre-2: var(--color-ink);
+  --color-encre-3: #7c8492;
+  --color-fond: var(--color-surface);
+  --color-ligne: var(--color-line);
+  --color-illu: var(--color-surface);
+  --color-sombre: var(--color-navy-900);
+
+  --color-cuivre: var(--color-fosa-500);
+  --color-cuivre-fonce: var(--color-fosa-600);
+  --color-cuivre-pale: var(--color-fosa-300);
+  --color-cuivre-clair: var(--color-fosa-100);
+
+  --font-titre: var(--font-robot);
+
+  /* Statuts (indépendants de l'identité de marque) */
   --color-vert: #3e7c4f;
   --color-vert-fond: #eaf2ec;
   --color-ambre: #a97b1e;
@@ -20,9 +68,6 @@
   --color-rouge: #b3402a;
   --color-rouge-fonce: #962f1e;
   --color-rouge-fond: #f7e9e5;
-  --font-titre: "Space Grotesk", system-ui, sans-serif;
-  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
 @layer base {

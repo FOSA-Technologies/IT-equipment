@@ -15,7 +15,7 @@ function ToastItem({ toast }: { toast: Toast }) {
   return (
     <div
       role="status"
-      className="rounded-lg bg-sombre px-[18px] py-[10px] text-sm text-white shadow-[0_8px_24px_rgba(30,33,39,0.25)]"
+      className="rounded-lg bg-sombre px-[18px] py-[10px] text-sm text-white shadow-soft"
     >
       {toast.message}
     </div>
