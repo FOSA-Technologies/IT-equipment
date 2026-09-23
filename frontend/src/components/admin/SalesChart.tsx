@@ -88,7 +88,7 @@ export function SalesChart({ ventes }: SalesChartProps) {
                 y1={y}
                 x2={LARGEUR - MARGES.droite}
                 y2={y}
-                stroke="#E3E6EB"
+                stroke="var(--color-ligne)"
                 strokeWidth="1"
               />
               <text
