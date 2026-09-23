@@ -17,9 +17,6 @@ export const CLIENT_COMPTOIR = {
   ville: "",
 };
 
-/** Taux de TVA appliqué aux prix (TTC) affichés en boutique et en caisse. */
-export const TAUX_TVA = 0.2;
-
 /** Livraison estimée : 2 jours ouvrés après la commande (date ISO AAAA-MM-JJ). */
 export function dateLivraisonEstimee(depuis = new Date()) {
   const jour = new Date(
