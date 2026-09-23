@@ -33,7 +33,11 @@ export function LoginPage() {
         motDePasse,
         resterConnecte,
       );
-      ouvrirSession(reponse.token, reponse.utilisateur.email);
+      ouvrirSession(
+        reponse.token,
+        reponse.utilisateur.email,
+        reponse.utilisateur.nom,
+      );
       afficherToast("Connecté à l'espace propriétaire");
       navigate("/dashboard");
     } catch (err) {
