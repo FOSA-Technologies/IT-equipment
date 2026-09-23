@@ -66,12 +66,81 @@ describe("auth", () => {
     const res = await api("GET", "/api/auth/me", { auth: true });
     assert.equal(res.status, 200);
     assert.equal(res.body.utilisateur.email, config.adminEmail);
+    assert.equal(res.body.utilisateur.nom, config.adminNom);
   });
 
   it("protège les routes propriétaire", async () => {
     assert.equal((await api("GET", "/api/dashboard")).status, 401);
     assert.equal((await api("GET", "/api/commandes")).status, 401);
     assert.equal((await api("DELETE", "/api/produits/clv-k65")).status, 401);
+  });
+});
+
+describe("compte", () => {
+  it("modifie le nom du compte", async () => {
+    const res = await api("PATCH", "/api/auth/me", {
+      auth: true,
+      body: { nom: "Nouveau Nom" },
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.body.utilisateur.nom, "Nouveau Nom");
+
+    const relu = await api("GET", "/api/auth/me", { auth: true });
+    assert.equal(relu.body.utilisateur.nom, "Nouveau Nom");
+
+    await api("PATCH", "/api/auth/me", {
+      auth: true,
+      body: { nom: config.adminNom },
+    }); // remise en état
+  });
+
+  it("refuse un changement de mot de passe sans mot de passe actuel", async () => {
+    const res = await api("PATCH", "/api/auth/me", {
+      auth: true,
+      body: { nouveauMotDePasse: "un-nouveau-mdp" },
+    });
+    assert.equal(res.status, 400);
+  });
+
+  it("refuse un mot de passe actuel incorrect", async () => {
+    const res = await api("PATCH", "/api/auth/me", {
+      auth: true,
+      body: {
+        motDePasseActuel: "faux-mot-de-passe",
+        nouveauMotDePasse: "un-nouveau-mdp",
+      },
+    });
+    assert.equal(res.status, 401);
+    assert.equal(res.body.error.code, "MOT_DE_PASSE_INCORRECT");
+  });
+
+  it("change le mot de passe puis permet de se reconnecter avec le nouveau", async () => {
+    const maj = await api("PATCH", "/api/auth/me", {
+      auth: true,
+      body: {
+        motDePasseActuel: config.adminPassword,
+        nouveauMotDePasse: "mot-de-passe-temporaire",
+      },
+    });
+    assert.equal(maj.status, 200);
+
+    const ancien = await api("POST", "/api/auth/login", {
+      body: { email: config.adminEmail, motDePasse: config.adminPassword },
+    });
+    assert.equal(ancien.status, 401);
+
+    const nouveau = await api("POST", "/api/auth/login", {
+      body: { email: config.adminEmail, motDePasse: "mot-de-passe-temporaire" },
+    });
+    assert.equal(nouveau.status, 200);
+
+    await api("PATCH", "/api/auth/me", {
+      auth: true,
+      body: {
+        motDePasseActuel: "mot-de-passe-temporaire",
+        nouveauMotDePasse: config.adminPassword,
+      },
+    }); // remise en état
   });
 });
 
@@ -377,6 +446,54 @@ describe("clients", () => {
         .status,
       404,
     );
+  });
+});
+
+describe("paramètres", () => {
+  it("renvoie les valeurs par défaut, sans authentification", async () => {
+    const res = await api("GET", "/api/parametres/boutique");
+    assert.equal(res.status, 200);
+    assert.equal(res.body.devise, "EUR");
+    assert.equal(res.body.tva, 20);
+  });
+
+  it("refuse la modification sans authentification", async () => {
+    const res = await api("PUT", "/api/parametres/boutique", {
+      body: { nom: "X", devise: "EUR", tva: 20 },
+    });
+    assert.equal(res.status, 401);
+  });
+
+  it("rejette une devise inconnue", async () => {
+    const res = await api("PUT", "/api/parametres/boutique", {
+      auth: true,
+      body: { nom: "IT-equipment", devise: "XYZ", tva: 20 },
+    });
+    assert.equal(res.status, 400);
+  });
+
+  it("enregistre puis renvoie les nouveaux paramètres (aussi sans authentification)", async () => {
+    const maj = await api("PUT", "/api/parametres/boutique", {
+      auth: true,
+      body: {
+        nom: "FOSA Retail",
+        ville: "Casablanca, Maroc",
+        devise: "MAD",
+        tva: 20,
+      },
+    });
+    assert.equal(maj.status, 200);
+    assert.equal(maj.body.devise, "MAD");
+
+    const relu = await api("GET", "/api/parametres/boutique");
+    assert.equal(relu.body.nom, "FOSA Retail");
+    assert.equal(relu.body.ville, "Casablanca, Maroc");
+    assert.equal(relu.body.devise, "MAD");
+
+    await api("PUT", "/api/parametres/boutique", {
+      auth: true,
+      body: { nom: "IT-equipment", ville: "", devise: "EUR", tva: 20 },
+    }); // remise en état
   });
 });
 
