@@ -7,6 +7,7 @@ import {
   TRIS,
 } from "./domain/catalogue.js";
 import { MOYENS_PAIEMENT, STATUTS_COMMANDE } from "./domain/commandes.js";
+import { DEVISES } from "./domain/parametres.js";
 import { arrondir } from "./utils/dates.js";
 
 // Messages d'erreur de validation en français.
@@ -59,6 +60,29 @@ export const loginSchema = z.object({
   email: z.string().trim().email().max(200),
   motDePasse: z.string().min(1).max(200),
   resterConnecte: z.boolean().default(false),
+});
+
+/**
+ * Mise à jour du compte propriétaire : le nom seul peut être modifié, ou le
+ * mot de passe (l'actuel est alors requis pour le vérifier avant de le changer).
+ */
+export const majCompteSchema = z
+  .object({
+    nom: texte(120).optional(),
+    motDePasseActuel: z.string().min(1).max(200).optional(),
+    nouveauMotDePasse: z.string().min(8).max(200).optional(),
+  })
+  .refine((d) => !d.nouveauMotDePasse || d.motDePasseActuel, {
+    message: "Mot de passe actuel requis pour le changer",
+    path: ["motDePasseActuel"],
+  });
+
+// --- Paramètres de la boutique
+export const parametresBoutiqueSchema = z.object({
+  nom: texte(120),
+  ville: z.string().trim().max(120).optional().default(""),
+  devise: z.enum(DEVISES),
+  tva: z.number().min(0).max(100),
 });
 
 // --- Produits
