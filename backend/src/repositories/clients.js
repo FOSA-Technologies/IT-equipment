@@ -47,15 +47,11 @@ export function createClientsRepo(db) {
   return {
     /** Liste agrégée des clients (un par e-mail), triée par activité récente. */
     liste({ q, page, limit }) {
-      const where = q
-        ? "WHERE LOWER(c1.email) LIKE ? OR LOWER(c1.nom) LIKE ?"
-        : "";
+      const where = q ? "WHERE LOWER(c1.email) LIKE ? OR LOWER(c1.nom) LIKE ?" : "";
       const params = q ? [`%${q.toLowerCase()}%`, `%${q.toLowerCase()}%`] : [];
 
       const total = db
-        .prepare(
-          `SELECT COUNT(DISTINCT LOWER(email)) AS n FROM commandes c1 ${where}`,
-        )
+        .prepare(`SELECT COUNT(DISTINCT LOWER(email)) AS n FROM commandes c1 ${where}`)
         .get(...params).n;
 
       const rows = db
@@ -70,15 +66,10 @@ export function createClientsRepo(db) {
     /** Détail d'un client (agrégats + historique de ses commandes), ou null. */
     detail(email) {
       const row = db
-        .prepare(
-          `${AGREGAT} WHERE LOWER(c1.email) = LOWER(?) GROUP BY LOWER(c1.email)`,
-        )
+        .prepare(`${AGREGAT} WHERE LOWER(c1.email) = LOWER(?) GROUP BY LOWER(c1.email)`)
         .get(email);
       if (!row) return null;
-      return {
-        ...versClient(row),
-        commandes: parCommande.all(email).map(versCommande),
-      };
+      return { ...versClient(row), commandes: parCommande.all(email).map(versCommande) };
     },
   };
 }
