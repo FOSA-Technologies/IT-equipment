@@ -29,6 +29,7 @@ export function loadConfig(env = process.env) {
     jwtExpiresIn: env.JWT_EXPIRES_IN ?? "8h",
     jwtExpiresInLong: env.JWT_EXPIRES_IN_LONG ?? "30d",
     adminEmail: (env.ADMIN_EMAIL ?? "proprietaire@it-equipment.fr").trim().toLowerCase(),
+    adminNom: (env.ADMIN_NOM ?? "").trim() || "Propriétaire",
     adminPassword,
     corsOrigins: (env.CORS_ORIGINS ?? "http://localhost:5173")
       .split(",")
