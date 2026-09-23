@@ -1,12 +1,16 @@
 import { Bouton } from "@/components/ui/Button";
+import { DEVISES, deviseActuelle } from "@/domain/format";
 import { CATEGORIES, type Categorie, type Filtres } from "@/types";
 
-export const PLAGES_PRIX = [
-  { valeur: "", libelle: "Tous les prix" },
-  { valeur: "0-75", libelle: "Moins de 75 €" },
-  { valeur: "75-150", libelle: "75 € à 150 €" },
-  { valeur: "150-", libelle: "Plus de 150 €" },
-] as const;
+function plagesPrix() {
+  const symbole = DEVISES[deviseActuelle()].symbole;
+  return [
+    { valeur: "", libelle: "Tous les prix" },
+    { valeur: "0-75", libelle: `Moins de 75 ${symbole}` },
+    { valeur: "75-150", libelle: `75 ${symbole} à 150 ${symbole}` },
+    { valeur: "150-", libelle: `Plus de 150 ${symbole}` },
+  ] as const;
+}
 
 interface FilterSidebarProps {
   filtres: Filtres;
@@ -59,7 +63,7 @@ export function FilterSidebar({
 
       <div className="border-t border-ligne pt-[22px] max-lg:border-t-0 max-lg:pt-0">
         <h4 className="mb-2.5 text-[13.5px] font-semibold">Prix</h4>
-        {PLAGES_PRIX.map((plage) => (
+        {plagesPrix().map((plage) => (
           <label
             key={plage.valeur}
             className="flex items-center gap-2.5 py-[3px] text-sm text-encre-2"
