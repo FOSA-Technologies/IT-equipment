@@ -6,12 +6,14 @@ import morgan from "morgan";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import { createClientsRepo } from "./repositories/clients.js";
 import { createCommandesRepo } from "./repositories/commandes.js";
+import { createParametresRepo } from "./repositories/parametres.js";
 import { createProduitsRepo } from "./repositories/produits.js";
 import { createUtilisateursRepo } from "./repositories/utilisateurs.js";
 import { authRouter } from "./routes/auth.js";
 import { clientsRouter } from "./routes/clients.js";
 import { commandesRouter } from "./routes/commandes.js";
 import { dashboardRouter } from "./routes/dashboard.js";
+import { parametresRouter } from "./routes/parametres.js";
 import { produitsRouter } from "./routes/produits.js";
 
 /** Construit l'application Express à partir d'une config et d'une base déjà initialisée. */
@@ -21,6 +23,7 @@ export function createApp({ config, db }) {
     produits: createProduitsRepo(db),
     commandes: createCommandesRepo(db, { timezone: config.timezone }),
     clients: createClientsRepo(db),
+    parametres: createParametresRepo(db),
     utilisateurs: createUtilisateursRepo(db),
   };
 
@@ -45,6 +48,7 @@ export function createApp({ config, db }) {
   app.use("/api/commandes", commandesRouter(deps));
   app.use("/api/clients", clientsRouter(deps));
   app.use("/api/dashboard", dashboardRouter(deps));
+  app.use("/api/parametres", parametresRouter(deps));
 
   app.use(notFoundHandler);
   app.use(errorHandler);
