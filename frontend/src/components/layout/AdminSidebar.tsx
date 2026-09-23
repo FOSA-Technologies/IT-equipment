@@ -1,16 +1,27 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "@/store/authStore";
+import {
+  LayoutDashboard,
+  ListOrdered,
+  LogOut,
+  LucideIcon,
+  Package,
+  Settings,
+  ShoppingCart,
+  Undo2,
+  UserRound,
+} from "lucide-react";
+import logo from "/fosa-logo.webp";
 
-const LIENS_ACTIFS = [
-  { to: "/dashboard", libelle: "Vue d'ensemble" },
-  { to: "/admin/vente", libelle: "Vente" },
-  { to: "/admin", libelle: "Produits" },
-  { to: "/admin/commandes", libelle: "Commandes" },
-  { to: "/admin/clients", libelle: "Clients" },
+const LIENS_ACTIFS: { to: string; libelle: string; Icon: LucideIcon }[] = [
+  { to: "/dashboard", libelle: "Vue d'ensemble", Icon: LayoutDashboard },
+  { to: "/admin/vente", libelle: "Vente", Icon: ShoppingCart },
+  { to: "/admin", libelle: "Produits", Icon: Package },
+  { to: "/admin/commandes", libelle: "Commandes", Icon: ListOrdered },
+  { to: "/admin/clients", libelle: "Clients", Icon: UserRound },
+  { to: "/admin/parametres", libelle: "Paramètres", Icon: Settings },
 ];
-
-const LIENS_A_VENIR = ["Paramètres"];
 
 const BASE_LIEN =
   "flex items-center gap-2.5 rounded-lg border-l-[3px] px-3 py-2.5 text-[14.5px]";
@@ -27,8 +38,11 @@ export function AdminSidebar() {
 
   return (
     <aside className="sticky top-0 flex h-screen flex-col gap-6 bg-sombre px-4 py-[22px] text-[#A6ADBB] max-lg:static max-lg:h-auto max-lg:flex-row max-lg:flex-wrap max-lg:items-center max-lg:gap-2.5 max-lg:px-4 max-lg:py-3">
-      <Link to="/" className="px-2.5 font-titre text-lg font-bold text-white">
-        IT<span className="text-cuivre">-</span>equipment
+      <Link
+        to="/"
+        className="px-2.5 font-titre text-lg font-bold text-white flex items-center gap-2.5"
+      >
+        <img src={logo} alt="Logo" className="h-6 w-6" /> <span>FOSA</span>
       </Link>
 
       <nav
@@ -48,16 +62,9 @@ export function AdminSidebar() {
               }`
             }
           >
+            <lien.Icon className="h-[17px] w-[17px]" />
             {lien.libelle}
           </NavLink>
-        ))}
-        {LIENS_A_VENIR.map((libelle) => (
-          <span
-            key={libelle}
-            className={`${BASE_LIEN} cursor-default border-transparent opacity-45`}
-          >
-            {libelle}
-          </span>
         ))}
       </nav>
 
@@ -66,6 +73,7 @@ export function AdminSidebar() {
           to="/"
           className={`${BASE_LIEN} border-transparent hover:bg-white/5 hover:text-white`}
         >
+          <Undo2 className="h-[17px] w-[17px]" />
           Voir la boutique
         </Link>
         <button
@@ -73,6 +81,7 @@ export function AdminSidebar() {
           onClick={deconnexion}
           className={`${BASE_LIEN} border-transparent text-left hover:bg-white/5 hover:text-white`}
         >
+          <LogOut className="h-[17px] w-[17px]" />
           Se déconnecter
         </button>
       </div>
