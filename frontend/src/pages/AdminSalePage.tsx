@@ -5,7 +5,11 @@ import { Bouton } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { SaleCartLine } from "@/components/vente/SaleCartLine";
 import { SaleProductCard } from "@/components/vente/SaleProductCard";
-import { decomposerTva, LIBELLES_PAIEMENT } from "@/domain/commandes";
+import {
+  decomposerTva,
+  LIBELLES_PAIEMENT,
+  tauxTvaActuel,
+} from "@/domain/commandes";
 import { formatPrix } from "@/domain/format";
 import { nbArticles, totalPanier } from "@/domain/panier";
 import { api } from "@/lib/api";
@@ -58,6 +62,7 @@ export function AdminSalePage() {
 
   const total = totalPanier(panier, produits);
   const { ht, tva } = decomposerTva(total);
+  const tvaPourcent = tauxTvaActuel();
   const nb = nbArticles(panier);
 
   function ajouter(produitId: string) {
@@ -245,7 +250,7 @@ export function AdminSalePage() {
               <span>{formatPrix(ht)}</span>
             </div>
             <div className="flex justify-between text-encre-2">
-              <span>TVA (20 %)</span>
+              <span>TVA ({tvaPourcent} %)</span>
               <span>{formatPrix(tva)}</span>
             </div>
             <div className="flex justify-between text-[17px] font-bold text-encre">
