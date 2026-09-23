@@ -7,9 +7,25 @@ export function AlimIllustration() {
       role="img"
       aria-label="Schéma d'une alimentation"
     >
-      <rect x="50" y="30" width="120" height="84" rx="8" fill="#fff" stroke="#22262E" strokeWidth="2.5" />
-      <circle cx="110" cy="72" r="26" fill="#F0F2F5" stroke="#22262E" strokeWidth="2" />
-      <g stroke="#7A8190" strokeWidth="1.5">
+      <rect
+        x="50"
+        y="30"
+        width="120"
+        height="84"
+        rx="8"
+        fill="#fff"
+        stroke="var(--color-encre)"
+        strokeWidth="2.5"
+      />
+      <circle
+        cx="110"
+        cy="72"
+        r="26"
+        fill="var(--color-illu)"
+        stroke="var(--color-encre)"
+        strokeWidth="2"
+      />
+      <g stroke="var(--color-encre-3)" strokeWidth="1.5">
         <path d="M110 72 V46" />
         <path d="M110 72 V98" />
         <path d="M110 72 H84" />
@@ -18,8 +34,15 @@ export function AlimIllustration() {
         <path d="M158 42 v60" />
         <path d="M166 42 v60" />
       </g>
-      <rect x="58" y="102" width="40" height="6" rx="2" fill="#A94E22" />
-      <g fill="none" stroke="#22262E" strokeWidth="1.5">
+      <rect
+        x="58"
+        y="102"
+        width="40"
+        height="6"
+        rx="2"
+        fill="var(--color-cuivre)"
+      />
+      <g fill="none" stroke="var(--color-encre)" strokeWidth="1.5">
         <circle cx="58" cy="38" r="2.5" />
         <circle cx="162" cy="38" r="2.5" />
         <circle cx="58" cy="106" r="2.5" />
