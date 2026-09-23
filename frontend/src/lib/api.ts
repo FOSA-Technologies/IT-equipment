@@ -3,12 +3,15 @@ import type {
   ClientDetail,
   CommandeCreee,
   CommandeDetail,
+  CompteUtilisateur,
   LignePanier,
   Dashboard,
+  MajCompte,
   MoyenPaiement,
   NouvelleCommande,
   PageClients,
   PageCommandes,
+  ParametresBoutique,
   Produit,
   ReponseConnexion,
   SaisieProduit,
@@ -23,6 +26,14 @@ export const api = {
       requete<ReponseConnexion>("/auth/login", {
         method: "POST",
         body: { email, motDePasse, resterConnecte },
+      }),
+    moi: () =>
+      requete<{ utilisateur: CompteUtilisateur }>("/auth/me", { auth: true }),
+    majCompte: (saisie: MajCompte) =>
+      requete<{ utilisateur: CompteUtilisateur }>("/auth/me", {
+        method: "PATCH",
+        body: saisie,
+        auth: true,
       }),
   },
 
@@ -98,5 +109,16 @@ export const api = {
 
   dashboard: {
     obtenir: () => requete<Dashboard>("/dashboard", { auth: true }),
+  },
+
+  parametres: {
+    /** Public : la devise et la TVA servent à l'affichage des prix. */
+    obtenirBoutique: () => requete<ParametresBoutique>("/parametres/boutique"),
+    definirBoutique: (saisie: ParametresBoutique) =>
+      requete<ParametresBoutique>("/parametres/boutique", {
+        method: "PUT",
+        body: saisie,
+        auth: true,
+      }),
   },
 };
