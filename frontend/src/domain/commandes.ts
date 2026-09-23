@@ -8,14 +8,26 @@ export const LIBELLES_PAIEMENT: Record<MoyenPaiement, string> = {
 };
 
 /**
- * Taux de TVA appliqué à l'affichage (les prix du catalogue sont TTC), à
- * l'identique de backend/src/domain/commandes.js#TAUX_TVA.
+ * Taux de TVA (en pourcentage) utilisé par `decomposerTva`, mis à jour au
+ * chargement des paramètres de la boutique (20 % par défaut avant ce chargement).
  */
-export const TAUX_TVA = 0.2;
+let tauxTvaCourant = 20;
 
-/** Décompose un montant TTC en base HT et montant de TVA. */
-export function decomposerTva(ttc: number): { ht: number; tva: number } {
-  const ht = ttc / (1 + TAUX_TVA);
+export function definirTauxTva(pourcentage: number): void {
+  tauxTvaCourant = pourcentage;
+}
+
+export function tauxTvaActuel(): number {
+  return tauxTvaCourant;
+}
+
+/** Décompose un montant TTC en base HT et montant de TVA, au taux courant (ou fourni, en %). */
+export function decomposerTva(
+  ttc: number,
+  pourcentage: number = tauxTvaCourant,
+): { ht: number; tva: number } {
+  const taux = pourcentage / 100;
+  const ht = ttc / (1 + taux);
   return { ht, tva: ttc - ht };
 }
 
